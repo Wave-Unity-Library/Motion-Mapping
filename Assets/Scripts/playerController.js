@@ -27,15 +27,22 @@ function LowPassFilterAccelerometer() : Vector3 {
     return lowPassValue;
 }
 
+var temp : float = 9.9;
+
 function FixedUpdate () {
   var moveHorizontal : float = Input.GetAxis ('Horizontal');
   var moveVertical : float = Input.GetAxis ('Vertical');
   var movement : Vector3 = Vector3.zero;
 
-  print(LowPassFilterAccelerometer().magnitude);
+  // print(temp);
+  // print(LowPassFilterAccelerometer().magnitude);
+  // print(LowPassFilterAccelerometer().magnitude);
+  print(Mathf.Abs(temp - LowPassFilterAccelerometer().magnitude));
+
+  var accelerationDifference : float = Mathf.Abs(temp - LowPassFilterAccelerometer().magnitude);
 
   // movement is in the direction of the camera
-  if (Input.GetKeyDown(KeyCode.UpArrow)) {
+  if ( accelerationDifference > .002 && .004 > accelerationDifference) {
     movement = Camera.main.transform.forward;
   } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
     movement = Camera.main.transform.forward * -1;
@@ -45,6 +52,7 @@ function FixedUpdate () {
     movement = Camera.main.transform.right * -1;
   }
 
+  temp = Mathf.Abs(LowPassFilterAccelerometer().magnitude);
   // movement vector applied to player gameObject
   rb.AddForce(movement * speed);
   SetCountText();

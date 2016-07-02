@@ -15,6 +15,11 @@ function Start () {
   offset = transform.position - player.transform.position;
 }
 
+  var pitch : Quaternion;
+  var yaw : Quaternion;
+  var roll : Quaternion;
+  var target : Quaternion = Quaternion.identity;
+
 function Update () {
   if (Input.touchCount > 0 || origin == Quaternion.identity) {
     origin = Input.gyro.attitude;
@@ -31,9 +36,6 @@ function Update () {
   // print(Input.acceleration);
   // var roll : Quaternion = Quaternion.AngleAxis(Input.gyro.attitude.eulerAngles.z, Vector3.forward);
   // var target : Quaternion = Quaternion.identity;
-  var pitch : Quaternion;
-  var yaw : Quaternion;
-  var roll : Quaternion;
 
   // if (eulerAngles.x > 45 || eulerAngles.x > 315) {
   //   roll = Quaternion.AngleAxis(0, Vector3.forward);
@@ -44,15 +46,13 @@ function Update () {
   //   pitch = Quaternion.AngleAxis(eulerAngles.y, Vector3.left);
   //   yaw = Quaternion.AngleAxis(eulerAngles.x, Vector3.up);
   // }
-
-    var target : Quaternion = Quaternion.identity;
-    target = yaw * target;
-    target = target * pitch;
+    // target = yaw * target;
+    // target = target * pitch;
     // transform.localRotation = yaw * pitch;
   // transform.Rotate (pitch, Space.Self);
   // transform.Rotate (yaw, Space.World);
   // var roll : Quaternion = Quaternion.AngleAxis(Input.gyro.attitude.eulerAngles.z, Vector3.forward);
-  transform.localRotation = Quaternion.Slerp(transform.rotation, target, .2);
+  transform.localRotation = Quaternion.Slerp(transform.rotation, yaw * pitch, .2);
 
   // transform.localRotation = pitch; 
 }
