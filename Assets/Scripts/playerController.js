@@ -1,47 +1,39 @@
 ﻿#pragma strict
 
 var speed : float;
-var countText : UnityEngine.UI.Text;
 
 private var rb : Rigidbody;
-private var count: int;
 private var distance: int;
 
-// low pass filter variables
-var AccelerometerUpdateInterval : float = 1.0 / 60.0;
-var LowPassKernelWidthInSeconds : float = 1.0;
+// Variables for used in the LowPassFilter function
 private var LowPassFilterFactor : float = AccelerometerUpdateInterval / LowPassKernelWidthInSeconds;
 private var lowPassValue : Vector3 = Vector3.zero;
+private var temp : float = 9.9;
+var AccelerometerUpdateInterval : float = 1.0 / 60.0;
+var LowPassKernelWidthInSeconds : float = 1.0;
 
 function Start() {
   // accessing rigid body component of player game object
   rb = GetComponent.<Rigidbody>();
 
   lowPassValue = Input.acceleration;
-  
-  SetCountText();
 }
 
+// Smooths out noise from accelerometer data
 function LowPassFilterAccelerometer() : Vector3 {
     lowPassValue = Vector3.Lerp(lowPassValue, Input.acceleration, LowPassFilterFactor);
     return lowPassValue;
 }
 
-var temp : float = 9.9;
-
+// Maps the player's real-world steps into in-game movement
 function FixedUpdate () {
-  var moveHorizontal : float = Input.GetAxis ('Horizontal');
-  var moveVertical : float = Input.GetAxis ('Vertical');
   var movement : Vector3 = Vector3.zero;
 
-  // print(temp);
-  // print(LowPassFilterAccelerometer().magnitude);
-  // print(LowPassFilterAccelerometer().magnitude);
   print(Mathf.Abs(temp - LowPassFilterAccelerometer().magnitude));
 
   var accelerationDifference : float = Mathf.Abs(temp - LowPassFilterAccelerometer().magnitude);
 
-  // movement is in the direction of the camera
+  // movement of player in the direction of the camera
   if ( accelerationDifference > .002 && .004 > accelerationDifference) {
     movement = Camera.main.transform.forward;
   } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
@@ -53,33 +45,14 @@ function FixedUpdate () {
   }
 
   temp = Mathf.Abs(LowPassFilterAccelerometer().magnitude);
-  // movement vector applied to player gameObject
+
+  // Movement vector applied to player gameObject
   rb.AddForce(movement * speed);
-  SetCountText();
 }
 
-// function Update() {
-//   var moveHorizontal : float = Input.GetAxis ('Horizontal');
-//   var moveVertical : float = Input.GetAxis ('Vertical');
-
-//   var movement : Vector3 = new Vector3 (0, 0, 0);
-
-//   if (Input.GetKeyDown(KeyCode.UpArrow)) {
-//     movement = Camera.main.transform.forward;
-//   } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
-//     movement = Camera.main.transform.forward * -1;
-//   }
-
-//   transform.position = transform.position + movement;
-// }
-
+// Handles interaction of player and orange cubes
 function OnTriggerEnter(other : Collider) {
     if (other.gameObject.CompareTag('Pick Up')) {
       other.gameObject.SetActive (false);
     }
-}
-
-function SetCountText() {
-  // countText.text = rb.velocity.ToString('F3');
-  countText.text = Input.gyro.attitude.eulerAngles.ToString('F3');
 }
