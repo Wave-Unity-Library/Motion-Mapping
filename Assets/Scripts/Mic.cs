@@ -10,8 +10,8 @@ public class Mic : MonoBehaviour {
 	}
 	
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.A)) StartRecording();
-		if (Input.GetKeyDown(KeyCode.S)) StopRecording();
+//		if (Input.GetKeyDown(KeyCode.A)) StartRecording();
+//		if (Input.GetKeyDown(KeyCode.S)) StopRecording();
 	}
 
 	void StartRecording() {
@@ -40,7 +40,7 @@ public class Mic : MonoBehaviour {
 		int sizeOfChunk = 640 * (Mathf.FloorToInt(samplesFloat.Length / 640f) - 1);
 		short[] inputChunk = new short[sizeOfChunk];
 		byte[] encoded = new byte[sizeOfChunk];
-		//NSpeex.SpeexEncoder m_wide_enc = new NSpeex.SpeexEncoder(NSpeex.BandMode.Wide);
+		NSpeex.SpeexEncoder m_wide_enc = new NSpeex.SpeexEncoder(NSpeex.BandMode.Wide);
 
 		clip.GetData(samplesFloat, 0);
 		ConvertToShort(samplesFloat, samplesShort);
@@ -58,7 +58,10 @@ public class Mic : MonoBehaviour {
 	AudioClip DecodeFromNSpeex(byte[] encoded, int length) {
 		short[] decoded = new short[encoded.Length];
 		float[] result = new float[encoded.Length];
-		//decompress encoded byte[] to short [];
+		//private NSpeex.SpeexDecoder m_wide_dec = new NSpeex.SpeexDecoder( NSpeex.BandMode.Wide );
+
+//		short[] decoded = new short[ 640 ];
+//		m_wide_dec.Decode( inputBytes, 0, dataLength, decoded, 0, false );
 
 		ConvertToFloat(decoded, result);
 
@@ -85,7 +88,7 @@ public class Mic : MonoBehaviour {
 			float sample = samples[i];
 			sample /= (float) short.MaxValue;
 			sample *= 2f;
-			sample -= 1;
+			sample -= 1f;
 
 			result[i] = sample;
 		}
