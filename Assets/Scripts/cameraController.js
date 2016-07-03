@@ -28,9 +28,9 @@ function Update () {
 
   pitch = Quaternion.AngleAxis(eulerAngles.y - 90, Vector3.left);
   yaw = Quaternion.AngleAxis(eulerAngles.x, Vector3.up);
-  transform.localRotation = Quaternion.Slerp(transform.rotation, yaw * pitch, .2);
-    // var gyroQuaternion : Vector3 = Quaternion.Inverse(Input.gyro.attitude).eulerAngles;
-    // transform.eulerAngles = new Vector3( -gyroQuaternion[0], -gyroQuaternion[1], gyroQuaternion[2]);
+  transform.localRotation = Quaternion.Slerp(Quaternion.identity * transform.rotation, yaw * pitch, .2);
+  // var gyroQuaternion : Vector3 = Quaternion.Inverse(Input.gyro.attitude).eulerAngles;
+  // transform.eulerAngles = new Vector3( -gyroQuaternion[0], -gyroQuaternion[1], gyroQuaternion[2]);
   // transform.rotation = Quaternion.Inverse(Input.gyro.attitude);
   // transform.rotation = Quaternion.Inverse(origin) * Input.gyro.attitude;
   // transform.forward = transform.forward * -1;

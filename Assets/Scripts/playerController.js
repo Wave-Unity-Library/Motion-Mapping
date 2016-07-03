@@ -6,16 +6,15 @@ private var rb : Rigidbody;
 private var distance: int;
 
 // Variables for used in the LowPassFilter function
-private var LowPassFilterFactor : float = AccelerometerUpdateInterval / LowPassKernelWidthInSeconds;
-private var lowPassValue : Vector3 = Vector3.zero;
-private var temp : float = 9.9;
 var AccelerometerUpdateInterval : float = 1.0 / 60.0;
 var LowPassKernelWidthInSeconds : float = 1.0;
+var LowPassFilterFactor : float = AccelerometerUpdateInterval / LowPassKernelWidthInSeconds;
+private var lowPassValue : Vector3 = Vector3.zero;
+private var temp : float = 9.9;
 
 function Start() {
   // accessing rigid body component of player game object
   rb = GetComponent.<Rigidbody>();
-
   lowPassValue = Input.acceleration;
 }
 
@@ -28,21 +27,19 @@ function LowPassFilterAccelerometer() : Vector3 {
 // Maps the player's real-world steps into in-game movement
 function FixedUpdate () {
   var movement : Vector3 = Vector3.zero;
-
-  print(Mathf.Abs(temp - LowPassFilterAccelerometer().magnitude));
-
   var accelerationDifference : float = Mathf.Abs(temp - LowPassFilterAccelerometer().magnitude);
-
+  
   // movement of player in the direction of the camera
-  if ( accelerationDifference > .002 && .004 > accelerationDifference) {
+  if ( accelerationDifference > .002 && .004 > accelerationDifference ) {
     movement = Camera.main.transform.forward;
-  } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
-    movement = Camera.main.transform.forward * -1;
-  } else if (Input.GetKeyDown(KeyCode.RightArrow)) {
-    movement = Camera.main.transform.right;
-  } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-    movement = Camera.main.transform.right * -1;
-  }
+  } 
+  // else if (Input.GetKeyDown(KeyCode.DownArrow)) {
+  //   movement = Camera.main.transform.forward * -1;
+  // } else if (Input.GetKeyDown(KeyCode.RightArrow)) {
+  //   movement = Camera.main.transform.right;
+  // } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+  //   movement = Camera.main.transform.right * -1;
+  // }
 
   temp = Mathf.Abs(LowPassFilterAccelerometer().magnitude);
 
