@@ -1,15 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
-using FragLabs.Audio.Codecs;
-using System;
-using FragLabs.Audio.Codecs.Opus;
+using NAudio.Codecs;
 
 public class AudioTransmitterHL : NetworkBehaviour {
 
 	private AudioSource aud;
 	private int encodedLength;
 	private int decodedLength;
+	private int lastSamplePlayed;
 
 	void Start () {
 		aud = GetComponent<AudioSource> ();
@@ -17,42 +16,43 @@ public class AudioTransmitterHL : NetworkBehaviour {
 
 	[Command]
 	void CmdStopRecording() {
-		byte[] encoded = EncodeToOpus(aud.clip, aud.clip.samples, out encodedLength);
-		RpcPlayAudio(encoded, 8000, aud.clip.channels);
+		byte[] encoded = EncodeToMuLaw(aud.clip);
+		RpcPlayAudio(encoded);
+	}
+
+	[ClientRpc]
+	void RpcPlayAudio(byte[] encoded) {
+		short[] samplesShort = new short[encoded.Length];
+		float[] samplesFloat = new float[encoded.Length];
+
+		for (int i = 0; i < encoded.Length; i++) {
+			samplesShort [i] = MuLawDecoder.MuLawToLinearSample (encoded [i]);
+		}
+
+		ConvertToFloat (samplesShort, samplesFloat);
+
+		AudioClip a = AudioClip.Create ("test", samplesFloat.Length, 1, 44100, false);
+		a.SetData (samplesFloat, 0);
+
+		GetComponent<AudioSource> ().clip = a;
+		GetComponent<AudioSource> ().Play ();
+	}
+
+	byte[] EncodeToMuLaw(AudioClip clip) {
+		float[] samplesFloat = new float[clip.samples * clip.channels];
+		short[] samplesShort = new short[clip.samples * clip.channels];
+		byte[] samplesByte = new byte[clip.samples * clip.channels];
+		clip.GetData (samplesFloat, 0);
+
+		ConvertToShort (samplesFloat, samplesShort);
+
+		for (int i = 0; i < samplesShort.Length; i++) {
+			samplesByte [i] = MuLawEncoder.LinearToMuLawSample (samplesShort[i]);
+		}
+
+		return samplesByte;
 	}
 		
-	[ClientRpc]
-	void RpcPlayAudio(byte[] encoded, int frequency, int channels) {
-		byte[] decodedByte = DecodeFromOpus(encoded, frequency, channels);
-		float[] decodedFloat = new float[decodedByte.Length / 4];
-
-		Buffer.BlockCopy(decodedByte, 0, decodedFloat, 0, decodedByte.Length);
-
-		AudioClip a = AudioClip.Create("test", decodedFloat.Length, 1, 8000, false);
-		a.SetData(decodedFloat, 0);
-
-		GetComponent<AudioSource>().clip = a;
-		GetComponent<AudioSource>().Play();
-	}
-
-	byte[] EncodeToOpus(AudioClip clip, int samplesLength, out int encodedLength) {
-		float[] samplesFloat = new float[clip.samples * clip.channels];
-		byte[] samplesByte = new byte[samplesFloat.Length * 4];
-
-		clip.GetData(samplesFloat, 0);
-
-		Buffer.BlockCopy(samplesFloat, 0, samplesByte, 0, samplesByte.Length);
-
-		OpusEncoder encoder = OpusEncoder.Create(8000, aud.clip.channels, Applications.Audio);
-
-		return encoder.Encode(samplesByte, samplesByte.Length, out encodedLength);
-	}
-
-	byte[] DecodeFromOpus(byte[] encoded, int frequency, int channels) {
-		OpusDecoder decoder = OpusDecoder.Create(frequency, channels);
-		return decoder.Decode(encoded, encoded.Length, out decodedLength);
-	}
-
 //	short[] EncodeToNSpeex(AudioClip clip, out int length) {
 //		float[] samplesFloat = new float[clip.samples * clip.channels];
 //		short[] samplesShort = new short[clip.samples * clip.channels];
@@ -113,7 +113,7 @@ public class AudioTransmitterHL : NetworkBehaviour {
 	}
 
 	void StartRecording() {
-		aud.clip = Microphone.Start(null, true, 1, 12000);
+		aud.clip = Microphone.Start(null, true, 1, 44100);
 	}
 
 	void Update () {
