@@ -24,7 +24,7 @@ public class AudioTransmitterHL : NetworkBehaviour {
 		GetComponent<AudioSource> ().Play ();
 	}
 
-	short[] EncodeToNSpeex(AudioClip clip, out int length) {
+	byte[] EncodeToNSpeex(AudioClip clip, out int length) {
 		float[] samplesFloat = new float[clip.samples * clip.channels];
 		short[] samplesShort = new short[clip.samples * clip.channels];
 		int sizeOfChunk = 640 * (int) (Mathf.FloorToInt(samplesFloat.Length / 640f) - 1);
@@ -42,17 +42,17 @@ public class AudioTransmitterHL : NetworkBehaviour {
 
 		length = m_wide_enc.Encode(inputChunk, 0, inputChunk.Length, encoded, 0, encoded.Length);
 
-		return inputChunk;
+		return encoded;
 	}
 
-	AudioClip DecodeFromNSpeex(short[] encoded, int length) {
+	AudioClip DecodeFromNSpeex(byte[] encoded, int length) {
 		float[] result = new float[encoded.Length];
 		short[] decoded = new short[encoded.Length];
 		NSpeex.SpeexDecoder m_wide_dec = new NSpeex.SpeexDecoder(NSpeex.BandMode.Wide);
 	
-		//yo = m_wide_dec.Decode(encoded, 0, encoded.Length, decoded, 0, false);
+		yo = m_wide_dec.Decode(encoded, 0, encoded.Length, decoded, 0, false);
 
-		ConvertToFloat(encoded, result);
+		ConvertToFloat(decoded, result);
 
 		AudioClip a = AudioClip.Create("test", result.Length, 1, 12000, false);
 		a.SetData(result, 0);
