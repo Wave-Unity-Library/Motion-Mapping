@@ -1,64 +1,91 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using NAudio.Codecs;
+using Ionic.Zlib;
 
 public class AudioTransmitterHL : NetworkBehaviour {
 
 	private AudioSource aud;
-	private int length;
 
 	void Start () {
 		aud = GetComponent<AudioSource> ();
 	}
 
 	[Command]
-	void CmdStopRecording() {
-		short[] encoded = EncodeToNSpeex(aud.clip, out length);
-		RpcPlayAudio(encoded, length);
+	void CmdStopRecording(byte[] encoded) {
+		RpcPlayAudio(encoded);
 	}
-		
+
 	[ClientRpc]
-	void RpcPlayAudio(short[] encoded, int length) {
-		AudioClip a = DecodeFromNSpeex(encoded, length);
-		GetComponent<AudioSource> ().clip = a;
-		GetComponent<AudioSource> ().Play ();
-	}
+	void RpcPlayAudio(byte[] encoded) {
+		encoded = ZlibDecompress (encoded, encoded.Length);
+		short[] samplesShort = new short[encoded.Length];
+		float[] samplesFloat = new float[encoded.Length];
 
-	byte[] EncodeToNSpeex(AudioClip clip, out int length) {
-		float[] samplesFloat = new float[clip.samples * clip.channels];
-		short[] samplesShort = new short[clip.samples * clip.channels];
-		int sizeOfChunk = 640 * (int) (Mathf.FloorToInt(samplesFloat.Length / 640f) - 1);
-		short[] inputChunk = new short[sizeOfChunk];
-		byte[] encoded = new byte[sizeOfChunk];
-		NSpeex.SpeexEncoder m_wide_enc = new NSpeex.SpeexEncoder(NSpeex.BandMode.Wide);
-
-		clip.GetData(samplesFloat, 0);
-		ConvertToShort(samplesFloat, samplesShort);
-
-		for (int i = 0; i < sizeOfChunk; i++) {
-			short sample = samplesShort[i];
-			inputChunk[i] = sample;
+		for (int i = 0; i < encoded.Length; i++) {
+			samplesShort [i] = MuLawDecoder.MuLawToLinearSample (encoded [i]);
 		}
 
-		length = m_wide_enc.Encode(inputChunk, 0, inputChunk.Length, encoded, 0, encoded.Length);
+		ConvertToFloat (samplesShort, samplesFloat);
 
-		return encoded;
+		AudioClip a = AudioClip.Create ("test", samplesFloat.Length, 1, 8000, false);
+		a.SetData (samplesFloat, 0);
+
+		GetComponent<AudioSource> ().clip = a;
+		GetComponent<AudioSource> ().Play ();
+		Debug.Log ("Recording sent.");
 	}
 
-	AudioClip DecodeFromNSpeex(byte[] encoded, int length) {
-		float[] result = new float[encoded.Length];
-		short[] decoded = new short[encoded.Length];
-		NSpeex.SpeexDecoder m_wide_dec = new NSpeex.SpeexDecoder(NSpeex.BandMode.Wide);
-	
-		yo = m_wide_dec.Decode(encoded, 0, encoded.Length, decoded, 0, false);
+	byte[] EncodeToMuLaw(AudioClip clip) {
+		float[] samplesFloat = new float[clip.samples * clip.channels];
+		short[] samplesShort = new short[clip.samples * clip.channels];
+		byte[] samplesByte = new byte[clip.samples * clip.channels];
+		clip.GetData (samplesFloat, 0);
 
-		ConvertToFloat(decoded, result);
+		ConvertToShort (samplesFloat, samplesShort);
 
-		AudioClip a = AudioClip.Create("test", result.Length, 1, 12000, false);
-		a.SetData(result, 0);
-
-		return a;
+		for (int i = 0; i < samplesShort.Length; i++) {
+			samplesByte [i] = MuLawEncoder.LinearToMuLawSample (samplesShort[i]);
+		}
+		return samplesByte;
 	}
+		
+//	short[] EncodeToNSpeex(AudioClip clip, out int length) {
+//		float[] samplesFloat = new float[clip.samples * clip.channels];
+//		short[] samplesShort = new short[clip.samples * clip.channels];
+//		int sizeOfChunk = 640 * (int) (Mathf.FloorToInt(samplesFloat.Length / 640f) - 1);
+//		short[] inputChunk = new short[sizeOfChunk];
+//		byte[] encoded = new byte[sizeOfChunk];
+//		NSpeex.SpeexEncoder m_wide_enc = new NSpeex.SpeexEncoder(NSpeex.BandMode.Wide);
+//
+//		clip.GetData(samplesFloat, 0);
+//		ConvertToShort(samplesFloat, samplesShort);
+//
+//		for (int i = 0; i < sizeOfChunk; i++) {
+//			short sample = samplesShort[i];
+//			inputChunk[i] = sample;
+//		}
+//
+//		length = m_wide_enc.Encode(inputChunk, 0, inputChunk.Length, encoded, 0, encoded.Length);
+//
+//		return inputChunk;
+//	}
+//
+//	AudioClip DecodeFromNSpeex(short[] encoded, int length) {
+//		float[] result = new float[encoded.Length];
+//		short[] decoded = new short[encoded.Length];
+//		NSpeex.SpeexDecoder m_wide_dec = new NSpeex.SpeexDecoder(NSpeex.BandMode.Wide);
+//	
+//		//yo = m_wide_dec.Decode(encoded, 0, encoded.Length, decoded, 0, false);
+//
+//		ConvertToFloat(encoded, result);
+//
+//		AudioClip a = AudioClip.Create("test", result.Length, 1, 12000, false);
+//		a.SetData(result, 0);
+//
+//		return a;
+//	}
 
 	void ConvertToShort(float[] samplesFloat, short[] samplesShort) {
 		for (int i = 0; i < samplesFloat.Length; i++) {
@@ -84,10 +111,19 @@ public class AudioTransmitterHL : NetworkBehaviour {
 	}
 
 	void StartRecording() {
-		aud.clip = Microphone.Start(null, true, 1, 12000);
+		aud.clip = Microphone.Start(null, true, 1, 8000);
 	}
 
 	void Update () {
+		if (!isLocalPlayer)
+			return;
+
+		var x = Input.GetAxis("Horizontal") * Time.deltaTime * 150.0f;
+		var z = Input.GetAxis("Vertical") * Time.deltaTime * 3.0f;
+
+		transform.Rotate(0, x, 0);
+		transform.Translate(0, 0, z);
+		
 		if (Input.GetKeyDown (KeyCode.A)) {
 			Debug.Log ("Recording started.");
 			StartRecording (); 	
@@ -96,7 +132,35 @@ public class AudioTransmitterHL : NetworkBehaviour {
 		if (Input.GetKeyDown (KeyCode.S)) {
 			Microphone.End (null);
 			Debug.Log ("Recording ended.");
-			CmdStopRecording ();
+			byte[] encodedWithMuLaw = EncodeToMuLaw(aud.clip);
+			byte[] encodedWithZLib = ZlibCompress (encodedWithMuLaw, encodedWithMuLaw.Length);
+			CmdStopRecording (encodedWithZLib);
+		}
+	}
+
+	byte[] ZlibCompress(byte[] input, int length)
+	{
+		using (var ms = new System.IO.MemoryStream())
+		{
+			using (var compressor = new Ionic.Zlib.ZlibStream(ms, CompressionMode.Compress, CompressionLevel.BestCompression))
+			{
+				compressor.Write(input, 0, length);
+			}
+
+			return ms.ToArray();
+		}
+	}
+
+	byte[] ZlibDecompress(byte[] input, int length)
+	{
+		using (var ms = new System.IO.MemoryStream())
+		{
+			using (var compressor = new Ionic.Zlib.ZlibStream(ms, CompressionMode.Decompress, CompressionLevel.BestCompression))
+			{
+				compressor.Write(input, 0, length);
+			}
+
+			return ms.ToArray();
 		}
 	}
 }
