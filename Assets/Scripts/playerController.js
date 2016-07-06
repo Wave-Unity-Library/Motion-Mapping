@@ -3,7 +3,7 @@
 var speed : float;
 
 private var rb : Rigidbody;
-private var distance: int;
+private var distance : int;
 
 // Variables for used in the LowPassFilter function
 var AccelerometerUpdateInterval : float = 1.0 / 60.0;
@@ -30,7 +30,7 @@ function FixedUpdate () {
   var accelerationDifference : float = Mathf.Abs(temp - LowPassFilterAccelerometer().magnitude);
   
   // movement of player in the direction of the camera
-  if ( accelerationDifference > .002 && .004 > accelerationDifference ) {
+  if ( accelerationDifference > .0015 && .004 > accelerationDifference ) {
     movement = Camera.main.transform.forward;
   } 
   // else if (Input.GetKeyDown(KeyCode.DownArrow)) {
