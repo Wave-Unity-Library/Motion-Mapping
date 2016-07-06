@@ -30,7 +30,6 @@ public class AudioTransmitterHL : NetworkBehaviour {
 		ConvertToFloat (samplesShort, samplesFloat);
 
 		AudioClip a = AudioClip.Create ("test", samplesFloat.Length, 1, 8000, false);
-		AudioClip a = AudioClip.Create ("test", samplesFloat.Length, 1, 1000, false);
 
 		a.SetData (samplesFloat, 0);
 
@@ -50,7 +49,6 @@ public class AudioTransmitterHL : NetworkBehaviour {
 		for (int i = 0; i < samplesShort.Length; i++) {
 			samplesByte [i] = MuLawEncoder.LinearToMuLawSample (samplesShort[i]);
 		}
-
 		return samplesByte;
 	}
 		
@@ -115,7 +113,6 @@ public class AudioTransmitterHL : NetworkBehaviour {
 
 	void StartRecording() {
 		aud.clip = Microphone.Start(null, true, 1, 8000);
-		aud.clip = Microphone.Start(null, true, 1, 1000);
 	}
 
 	void Update () {
@@ -136,7 +133,6 @@ public class AudioTransmitterHL : NetworkBehaviour {
 		if (Input.GetKeyDown (KeyCode.S)) {
 			Microphone.End (null);
 			Debug.Log ("Recording ended.");
-<<<<<<< HEAD
 			byte[] encodedWithMuLaw = EncodeToMuLaw(aud.clip);
 			byte[] encodedWithZLib = ZlibCompress (encodedWithMuLaw, encodedWithMuLaw.Length);
 			CmdStopRecording (encodedWithZLib);
@@ -166,10 +162,8 @@ public class AudioTransmitterHL : NetworkBehaviour {
 			}
 
 			return ms.ToArray();
-=======
 			byte[] encoded = EncodeToMuLaw(aud.clip);
 			CmdStopRecording (encoded);
->>>>>>> master
 		}
 	}
 }
