@@ -6,17 +6,13 @@ using NAudio.Codecs;
 public class AudioTransmitterHL : NetworkBehaviour {
 
 	private AudioSource aud;
-	private int encodedLength;
-	private int decodedLength;
-	private int lastSamplePlayed;
 
 	void Start () {
 		aud = GetComponent<AudioSource> ();
 	}
 
 	[Command]
-	void CmdStopRecording() {
-		byte[] encoded = EncodeToMuLaw(aud.clip);
+	void CmdStopRecording(byte[] encoded) {
 		RpcPlayAudio(encoded);
 	}
 
@@ -31,11 +27,12 @@ public class AudioTransmitterHL : NetworkBehaviour {
 
 		ConvertToFloat (samplesShort, samplesFloat);
 
-		AudioClip a = AudioClip.Create ("test", samplesFloat.Length, 1, 44100, false);
+		AudioClip a = AudioClip.Create ("test", samplesFloat.Length, 1, 1000, false);
 		a.SetData (samplesFloat, 0);
 
 		GetComponent<AudioSource> ().clip = a;
 		GetComponent<AudioSource> ().Play ();
+		Debug.Log ("Recording sent.");
 	}
 
 	byte[] EncodeToMuLaw(AudioClip clip) {
@@ -113,10 +110,19 @@ public class AudioTransmitterHL : NetworkBehaviour {
 	}
 
 	void StartRecording() {
-		aud.clip = Microphone.Start(null, true, 1, 44100);
+		aud.clip = Microphone.Start(null, true, 1, 1000);
 	}
 
 	void Update () {
+		if (!isLocalPlayer)
+			return;
+
+		var x = Input.GetAxis("Horizontal") * Time.deltaTime * 150.0f;
+		var z = Input.GetAxis("Vertical") * Time.deltaTime * 3.0f;
+
+		transform.Rotate(0, x, 0);
+		transform.Translate(0, 0, z);
+		
 		if (Input.GetKeyDown (KeyCode.A)) {
 			Debug.Log ("Recording started.");
 			StartRecording (); 	
@@ -125,7 +131,8 @@ public class AudioTransmitterHL : NetworkBehaviour {
 		if (Input.GetKeyDown (KeyCode.S)) {
 			Microphone.End (null);
 			Debug.Log ("Recording ended.");
-			CmdStopRecording ();
+			byte[] encoded = EncodeToMuLaw(aud.clip);
+			CmdStopRecording (encoded);
 		}
 	}
 }
