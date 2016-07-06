@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 using NAudio.Codecs;
+using Ionic.Zlib;
 
 public class AudioTransmitterHL : NetworkBehaviour {
 
@@ -18,6 +19,7 @@ public class AudioTransmitterHL : NetworkBehaviour {
 
 	[ClientRpc]
 	void RpcPlayAudio(byte[] encoded) {
+		encoded = ZlibDecompress (encoded, encoded.Length);
 		short[] samplesShort = new short[encoded.Length];
 		float[] samplesFloat = new float[encoded.Length];
 
@@ -27,7 +29,8 @@ public class AudioTransmitterHL : NetworkBehaviour {
 
 		ConvertToFloat (samplesShort, samplesFloat);
 
-		AudioClip a = AudioClip.Create ("test", samplesFloat.Length, 1, 1000, false);
+		AudioClip a = AudioClip.Create ("test", samplesFloat.Length, 1, 8000, false);
+
 		a.SetData (samplesFloat, 0);
 
 		GetComponent<AudioSource> ().clip = a;
@@ -46,7 +49,6 @@ public class AudioTransmitterHL : NetworkBehaviour {
 		for (int i = 0; i < samplesShort.Length; i++) {
 			samplesByte [i] = MuLawEncoder.LinearToMuLawSample (samplesShort[i]);
 		}
-
 		return samplesByte;
 	}
 		
@@ -110,7 +112,7 @@ public class AudioTransmitterHL : NetworkBehaviour {
 	}
 
 	void StartRecording() {
-		aud.clip = Microphone.Start(null, true, 1, 1000);
+		aud.clip = Microphone.Start(null, true, 1, 8000);
 	}
 
 	void Update () {
@@ -131,6 +133,35 @@ public class AudioTransmitterHL : NetworkBehaviour {
 		if (Input.GetKeyDown (KeyCode.S)) {
 			Microphone.End (null);
 			Debug.Log ("Recording ended.");
+			byte[] encodedWithMuLaw = EncodeToMuLaw(aud.clip);
+			byte[] encodedWithZLib = ZlibCompress (encodedWithMuLaw, encodedWithMuLaw.Length);
+			CmdStopRecording (encodedWithZLib);
+		}
+	}
+
+	byte[] ZlibCompress(byte[] input, int length)
+	{
+		using (var ms = new System.IO.MemoryStream())
+		{
+			using (var compressor = new Ionic.Zlib.ZlibStream(ms, CompressionMode.Compress, CompressionLevel.BestCompression))
+			{
+				compressor.Write(input, 0, length);
+			}
+
+			return ms.ToArray();
+		}
+	}
+
+	byte[] ZlibDecompress(byte[] input, int length)
+	{
+		using (var ms = new System.IO.MemoryStream())
+		{
+			using (var compressor = new Ionic.Zlib.ZlibStream(ms, CompressionMode.Decompress, CompressionLevel.BestCompression))
+			{
+				compressor.Write(input, 0, length);
+			}
+
+			return ms.ToArray();
 			byte[] encoded = EncodeToMuLaw(aud.clip);
 			CmdStopRecording (encoded);
 		}
