@@ -1,78 +1,93 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using NAudio.Codecs;
+using Ionic.Zlib;
+using System;
 
 public class AudioTransmitterHL : NetworkBehaviour {
 
 	private AudioSource aud;
-	private int length;
+	private AudioClip clip;
+	private CircularBuffer<float[]> cBuffer = new CircularBuffer<float[]>(15);
+	private bool isTransmitting = false;
+	private const int recordFrequency = 5000;
+	private int lastPos = 0;
+	private int lastPlayed = 0;
+	private float[] sampleBuffer;
+	private float playbackDelay = 0;
+	private bool isPlaying = false;
+	private bool shouldPlay = false;
+	private double percentPlayed = 0;
+	private float lastTime = 0;
 
 	void Start () {
 		aud = GetComponent<AudioSource> ();
+		clip = AudioClip.Create ("test", recordFrequency, 1, recordFrequency, false);
+		aud.clip = clip;
 	}
 
 	[Command]
-	void CmdStopRecording() {
-		short[] encoded = EncodeToNSpeex(aud.clip, out length);
-		RpcPlayAudio(encoded, length);
+	void CmdStopRecording (byte[] encoded) {
+		RpcPlayAudio(encoded);
 	}
-		
+
 	[ClientRpc]
-	void RpcPlayAudio(short[] encoded, int length) {
-		AudioClip a = DecodeFromNSpeex(encoded, length);
-		GetComponent<AudioSource> ().clip = a;
-		GetComponent<AudioSource> ().Play ();
-	}
+	void RpcPlayAudio (byte[] encoded) {
+		if (lastPlayed >= 5000)
+			lastPlayed -= 5000;
+		
+		encoded = ZlibDecompress (encoded, encoded.Length);
+		short[] samplesShort = new short[encoded.Length];
+		float[] samplesFloat = new float[encoded.Length / 4];
 
-	byte[] EncodeToNSpeex(AudioClip clip, out int length) {
-		float[] samplesFloat = new float[clip.samples * clip.channels];
-		short[] samplesShort = new short[clip.samples * clip.channels];
-		int sizeOfChunk = 640 * (int) (Mathf.FloorToInt(samplesFloat.Length / 640f) - 1);
-		short[] inputChunk = new short[sizeOfChunk];
-		byte[] encoded = new byte[sizeOfChunk];
-		NSpeex.SpeexEncoder m_wide_enc = new NSpeex.SpeexEncoder(NSpeex.BandMode.Wide);
+//		for (int i = 0; i < encoded.Length; i++) {
+//			samplesShort [i] = MuLawDecoder.MuLawToLinearSample (encoded [i]);
+//		}
 
-		clip.GetData(samplesFloat, 0);
-		ConvertToShort(samplesFloat, samplesShort);
+		Buffer.BlockCopy (encoded, 0, samplesFloat, 0, encoded.Length);	
+			
+		//ConvertToFloat (samplesShort, samplesFloat);
 
-		for (int i = 0; i < sizeOfChunk; i++) {
-			short sample = samplesShort[i];
-			inputChunk[i] = sample;
+		percentPlayed = percentPlayed + ((double) samplesFloat.Length / aud.clip.samples);
+
+		GetComponent<AudioSource> ().clip.SetData (samplesFloat, lastPlayed);
+
+		if (!isPlaying) {
+			GetComponent<AudioSource> ().Play ();
+			aud.loop = true;
+			isPlaying = true;
+		}
+			
+		if (GetComponent<AudioSource> ().time >= percentPlayed) {
+//			Debug.Log ("time: " + GetComponent<AudioSource> ().time);
+//			Debug.Log ("percent played: " + percentPlayed);
+//			GetComponent<AudioSource> ().Pause ();
+			isPlaying = false;
+			Debug.Log ("not caught up");
 		}
 
-		length = m_wide_enc.Encode(inputChunk, 0, inputChunk.Length, encoded, 0, encoded.Length);
-
-		return encoded;
+		if (percentPlayed >= 1) {
+			percentPlayed = percentPlayed - 1;
+		}
+			
+		Debug.Log ("Recording sent.");
+		lastPlayed += samplesFloat.Length;
 	}
 
-	AudioClip DecodeFromNSpeex(byte[] encoded, int length) {
-		float[] result = new float[encoded.Length];
-		short[] decoded = new short[encoded.Length];
-		NSpeex.SpeexDecoder m_wide_dec = new NSpeex.SpeexDecoder(NSpeex.BandMode.Wide);
-	
-		yo = m_wide_dec.Decode(encoded, 0, encoded.Length, decoded, 0, false);
-
-		ConvertToFloat(decoded, result);
-
-		AudioClip a = AudioClip.Create("test", result.Length, 1, 12000, false);
-		a.SetData(result, 0);
-
-		return a;
-	}
-
-	void ConvertToShort(float[] samplesFloat, short[] samplesShort) {
+	void ConvertToShort (float[] samplesFloat, short[] samplesShort) {
 		for (int i = 0; i < samplesFloat.Length; i++) {
 			float sample = samplesFloat[i];
 			sample += 1f; // now it's in the range 0 .. 2
 			sample *= 0.5f; // now it's in the range 0 .. 1
 
-			short val = (short) Mathf.FloorToInt(sample * short.MaxValue);
+			short val = (short) Mathf.FloorToInt (sample * short.MaxValue);
 
 			samplesShort[i] = val;
 		}
 	}
 
-	void ConvertToFloat(short[] samples, float[] result) {
+	void ConvertToFloat (short[] samples, float[] result) {
 		for (int i = 0; i < samples.Length; i++) {
 			float sample = samples[i];
 			sample /= (float) short.MaxValue;
@@ -83,20 +98,90 @@ public class AudioTransmitterHL : NetworkBehaviour {
 		}
 	}
 
-	void StartRecording() {
-		aud.clip = Microphone.Start(null, true, 1, 12000);
+	void StartRecording () {
+		aud.clip = Microphone.Start (null, true, 1, recordFrequency);
+		while (Microphone.GetPosition (null) < 0) {}
+		isTransmitting = true;
 	}
 
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.A)) {
+		if (!isLocalPlayer)
+			return;
+
+		playbackDelay += Time.deltaTime;
+
+		if (isTransmitting) {			
+			int currentPos = Microphone.GetPosition (null);
+			int diff = currentPos - lastPos;
+
+			if (currentPos < lastPos) {
+				diff = recordFrequency - lastPos + currentPos - 1;
+			}
+
+			if (diff >= 333) {
+				sampleBuffer = new float[diff * aud.clip.channels];
+				aud.clip.GetData (sampleBuffer, lastPos);
+
+				cBuffer.Enqueue (sampleBuffer);
+			
+				lastPos = currentPos;
+			}
+
+			if (!cBuffer.IsEmpty) {
+				if (playbackDelay >= 0.05f) {
+					byte[] sampleBytes = new byte[sampleBuffer.Length * 4];
+					Buffer.BlockCopy (cBuffer.Dequeue(), 0, sampleBytes, 0, sampleBytes.Length);
+					//byte[] encodedWithMuLaw = EncodeToMuLaw (cBuffer.Dequeue ());
+					byte[] encodedWithZLib = ZlibCompress (sampleBytes, sampleBytes.Length);
+					CmdStopRecording (encodedWithZLib);
+					playbackDelay = 0;
+				}
+			}
+				
+		}
+
+		if (Input.GetKeyDown (KeyCode.O)) {
 			Debug.Log ("Recording started.");
 			StartRecording (); 	
 		}
 
-		if (Input.GetKeyDown (KeyCode.S)) {
+		if (Input.GetKeyDown (KeyCode.P)) {
 			Microphone.End (null);
 			Debug.Log ("Recording ended.");
-			CmdStopRecording ();
+			isTransmitting = false;
 		}
+	}
+		
+	byte[] ZlibCompress (byte[] input, int length) {
+		using (var ms = new System.IO.MemoryStream ()) {
+			using (var compressor = new Ionic.Zlib.ZlibStream (ms, CompressionMode.Compress, CompressionLevel.BestCompression)) {
+				compressor.Write (input, 0, length);
+			}
+
+			return ms.ToArray ();
+		}
+	}
+
+	byte[] ZlibDecompress (byte[] input, int length) {
+		using (var ms = new System.IO.MemoryStream ()) {
+			using (var compressor = new Ionic.Zlib.ZlibStream (ms, CompressionMode.Decompress, CompressionLevel.BestCompression)) {
+				compressor.Write (input, 0, length);
+			}
+
+			return ms.ToArray ();
+		}
+	}
+
+	byte[] EncodeToMuLaw (float[] samplesFloat) {
+		short[] samplesShort = new short[samplesFloat.Length];
+		byte[] samplesByte = new byte[samplesFloat.Length];
+
+		ConvertToShort (samplesFloat, samplesShort);
+
+		for (int i = 0; i < samplesShort.Length; i++) {
+			samplesByte [i] = MuLawEncoder.LinearToMuLawSample (samplesShort[i]);
+		}
+
+		return samplesByte;
 	}
 }

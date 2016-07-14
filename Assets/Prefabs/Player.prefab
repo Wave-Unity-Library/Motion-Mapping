@@ -12,8 +12,9 @@ GameObject:
   - 23: {fileID: 2340808}
   - 114: {fileID: 11465236}
   - 82: {fileID: 8204182}
-  - 114: {fileID: 11471698}
-  - 114: {fileID: 11436852}
+  - 114: {fileID: 11469970}
+  - 114: {fileID: 11483188}
+  - 114: {fileID: 11458372}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -129,7 +130,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 0
+    m_RotationOrder: 4
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -141,7 +142,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &11436852
+--- !u!114 &11458372
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -149,18 +150,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 160282}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1768714887, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Script: {fileID: 11500000, guid: b35f19940837e48058f5668774c60502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TransformSyncMode: 1
-  m_SendInterval: 0.1
-  m_SyncRotationAxis: 7
-  m_RotationSyncCompression: 0
-  m_SyncSpin: 0
-  m_MovementTheshold: 0.001
-  m_SnapThreshold: 5
-  m_InterpolateRotation: 1
-  m_InterpolateMovement: 1
 --- !u!114 &11465236
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -193,7 +185,7 @@ MonoBehaviour:
     i15: 55
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
---- !u!114 &11471698
+--- !u!114 &11469970
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -201,9 +193,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 160282}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 628fb28ae5492492881b9e14525ca81d, type: 3}
+  m_Script: {fileID: 11500000, guid: f3e1d597f08cb47378103e124a9d5144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11483188
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 160282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
