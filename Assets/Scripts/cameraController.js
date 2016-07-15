@@ -18,7 +18,7 @@ function Start () {
 }
 
 // Changes rotation of camera to reflect orientation of phone
-function Update () {
+function Update () { 
   phoneOrientation = Input.gyro.attitude;
   orientationCorrection = Quaternion.AngleAxis(-90, Vector3.left);
   inGameOrientation = new Quaternion(phoneOrientation.x, phoneOrientation.y, -phoneOrientation.z, -phoneOrientation.w);
