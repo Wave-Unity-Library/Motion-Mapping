@@ -15,11 +15,10 @@ public class VoiceController : NetworkBehaviour {
 	int lastPos = 0;
 	int lastPlayed = 0;
 	float[] sampleBuffer;
+	float[] filtered;
 	float playbackDelay = 0;
 	bool isPlaying = false;
-	bool shouldPlay = false;
 	double percentPlayed = 0;
-	float lastTime = 0;
 
 	void Start () {
 		int minFreq;
@@ -27,7 +26,7 @@ public class VoiceController : NetworkBehaviour {
 
 		Microphone.GetDeviceCaps(null, out minFreq, out maxFreq);
 
-		recordFrequency = minFreq == 0 && maxFreq == 0 ? 44100 : 5000;
+		recordFrequency = minFreq == 0 && maxFreq == 0 ? 44100 : maxFreq;
 
 		aud = GetComponent<AudioSource> ();
 		clip = AudioClip.Create ("test", recordFrequency, 1, recordFrequency, false);
@@ -45,7 +44,6 @@ public class VoiceController : NetworkBehaviour {
 			lastPlayed -= recordFrequency;
 		
 		encoded = VoiceUtils.ZlibDecompress (encoded, encoded.Length);
-		short[] samplesShort = new short[encoded.Length];
 		float[] samplesFloat = new float[encoded.Length / 4];
 
 		Buffer.BlockCopy (encoded, 0, samplesFloat, 0, encoded.Length);	
@@ -97,16 +95,19 @@ public class VoiceController : NetworkBehaviour {
 
 			if (diff >= partitionSize) {
 				sampleBuffer = new float[diff * aud.clip.channels];
+
 				aud.clip.GetData (sampleBuffer, lastPos);
 
-				cBuffer.Enqueue (sampleBuffer);
+				VoiceUtils.Downsample (sampleBuffer, out filtered);
+
+				cBuffer.Enqueue (filtered);
 			
 				lastPos = currentPos;
 			}
 
 			if (!cBuffer.IsEmpty) {
 				if (playbackDelay >= 0.05f) {
-					byte[] sampleBytes = new byte[sampleBuffer.Length * 4];
+					byte[] sampleBytes = new byte[filtered.Length * 4];
 			
 					Buffer.BlockCopy (cBuffer.Dequeue (), 0, sampleBytes, 0, sampleBytes.Length);
 					byte[] encodedWithZLib = VoiceUtils.ZlibCompress (sampleBytes, sampleBytes.Length);
