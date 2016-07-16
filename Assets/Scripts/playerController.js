@@ -33,13 +33,6 @@ function FixedUpdate () {
   if ( accelerationDifference > .0015 && .004 > accelerationDifference ) {
     movement = Camera.main.transform.forward;
   } 
-  // else if (Input.GetKeyDown(KeyCode.DownArrow)) {
-  //   movement = Camera.main.transform.forward * -1;
-  // } else if (Input.GetKeyDown(KeyCode.RightArrow)) {
-  //   movement = Camera.main.transform.right;
-  // } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-  //   movement = Camera.main.transform.right * -1;
-  // }
 
   temp = Mathf.Abs(LowPassFilterAccelerometer().magnitude);
 
