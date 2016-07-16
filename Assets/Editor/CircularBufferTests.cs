@@ -2,13 +2,14 @@
 using UnityEditor;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 public class CircularBufferTests {
 	
 	[Test]
 	public void EnqueueThreeFloats()
 	{
-		CircularBuffer queue = new CircularBuffer(5);
+		CircularBuffer<float> queue = new CircularBuffer<float>(5);
 		queue.Enqueue(1);
 		queue.Enqueue(2);
 		queue.Enqueue(3);
@@ -18,7 +19,7 @@ public class CircularBufferTests {
 
 	[Test]
 	public void EnqueuingWhenFull() {
-		CircularBuffer queue = new CircularBuffer(3);
+		CircularBuffer<float> queue = new CircularBuffer<float>(3);
 		queue.Enqueue(1);
 		queue.Enqueue(2);
 		queue.Enqueue(3);
@@ -29,7 +30,7 @@ public class CircularBufferTests {
 
 	[Test]
 	public void DequeueThreeFloats() {
-		CircularBuffer queue = new CircularBuffer(5);
+		CircularBuffer<float> queue = new CircularBuffer<float>(5);
 		queue.Enqueue(1);
 		queue.Enqueue(2);
 		queue.Enqueue(3);
@@ -44,7 +45,7 @@ public class CircularBufferTests {
 
 	[Test]
 	public void DequeueFromEmpty() {
-		CircularBuffer queue = new CircularBuffer(5);
+		CircularBuffer<float> queue = new CircularBuffer<float>(5);
 
 		try {
 			queue.Dequeue();
@@ -55,7 +56,7 @@ public class CircularBufferTests {
 
 	[Test]
 	public void OverwriteQueue() {
-		CircularBuffer queue = new CircularBuffer(5);
+		CircularBuffer<float> queue = new CircularBuffer<float>(5);
 		float[] values = new float[5];
 		int i = 0;
 
@@ -73,10 +74,10 @@ public class CircularBufferTests {
 			i++;
 		}
 
-		Assert.AreEqual(values[0], 3f);
-		Assert.AreEqual(values[1], 4f);
-		Assert.AreEqual(values[2], 5f);
-		Assert.AreEqual(values[3], 6f);
-		Assert.AreEqual(values[4], 7f);
+		Assert.AreEqual(values[0], 3);
+		Assert.AreEqual(values[1], 4);
+		Assert.AreEqual(values[2], 5);
+		Assert.AreEqual(values[3], 6);
+		Assert.AreEqual(values[4], 7);
 	}
 }
