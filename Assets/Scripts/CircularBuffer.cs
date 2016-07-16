@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
-public class CircularBuffer {
-	private float[] buffer;
+public class CircularBuffer<T> {
+	private T[] buffer;
 	private int head;
 	private int tail;
 	private int bufferSize;
 	private int length;
 
 	public CircularBuffer(int bufferSize) {
-		buffer = new float[bufferSize];
+		buffer = new T[bufferSize];
 		this.bufferSize = bufferSize;
 		head = this.bufferSize - 1;
 	}
 
-	public void Enqueue(float sample) {
+	public void Enqueue(T sample) {
 		head = NextPosition(head);
 		buffer[head] = sample;
 
@@ -24,11 +26,11 @@ public class CircularBuffer {
 			length++;
 	}
 
-	public float Dequeue() {
+	public T Dequeue() {
 		if (IsEmpty)
 			throw new UnityException("Queue is empty.");
 
-		float dequeued = buffer[tail];
+		T dequeued = buffer[tail];
 		tail = NextPosition(tail);
 		length--;
 
@@ -39,7 +41,7 @@ public class CircularBuffer {
 		return (pos + 1) % bufferSize;
 	}
 
-	public float[] GetBuffer {
+	public T[] GetBuffer {
 		get { return buffer; }
 	}
 
