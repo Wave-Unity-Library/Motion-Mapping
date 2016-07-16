@@ -2,6 +2,7 @@
 using System.Collections;
 using Ionic.Zlib;
 using NSpeex;
+using System;
 
 namespace Voice {
 	
@@ -38,15 +39,22 @@ namespace Voice {
 			}
 		}
 
-		static NSpeex.SpeexEncoder nspeexEnc = new NSpeex.SpeexEncoder(NSpeex.BandMode.Wide);
-		static NSpeex.SpeexDecoder nspeexDec = new NSpeex.SpeexDecoder(NSpeex.BandMode.Wide);
+		static NSpeex.SpeexEncoder nspeexEnc = new NSpeex.SpeexEncoder(NSpeex.BandMode.Narrow);
+		static NSpeex.SpeexDecoder nspeexDec = new NSpeex.SpeexDecoder(NSpeex.BandMode.Narrow);
 
 		public static byte[] NSpeexCompress (float[] samplesFloat, out int length) {
+			int sizeOfChunk = 320 * (Mathf.FloorToInt (samplesFloat.Length/320f) - 1);
 			short[] samplesShort = new short[samplesFloat.Length];
-			byte[] encoded = new byte[samplesFloat.Length];
+			short[] samplesShortForNSpeex = new short[sizeOfChunk];
+			byte[] encoded = new byte[sizeOfChunk];
 
 			samplesFloat.ConvertToShort(samplesShort);
-			length = nspeexEnc.Encode(samplesShort, 0, samplesShort.Length, encoded, 0, encoded.Length);
+
+			for (int i = 0; i < sizeOfChunk; i++) {
+				samplesShortForNSpeex [i] = samplesShort [i];
+			}
+
+			length = nspeexEnc.Encode(samplesShortForNSpeex, 0, samplesShortForNSpeex.Length, encoded, 0, encoded.Length);
 
 			return encoded;
 		}
@@ -81,11 +89,19 @@ namespace Voice {
 			}
 		}
 
-		public static float[] Downsample(float[] samplesFloat, out float[] filtered) {
-			filtered = new float[samplesFloat.Length / 4];
+		public static float[] Downsample (float[] samplesFloat, out float[] filtered) {
+			filtered = new float[samplesFloat.Length / 2];
+			int length = (2 / samplesFloat.Length) * samplesFloat.Length;
 
-			for (int i = 3, index = 0; i < samplesFloat.Length; i += 4, index++) {
-				filtered[index] = samplesFloat[i];
+			for (int i = 0, index = 0; i < length; i += 2, index++) {
+				float sum = 0;
+
+				for (int j = i; j < i + 2; j++) {
+					sum += samplesFloat [j];
+				}
+
+				sum /= 2;
+				filtered [index] = sum;
 			}
 
 			return filtered;
