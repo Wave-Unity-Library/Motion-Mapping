@@ -12,17 +12,17 @@ private var verticalRotationCorrection : Quaternion;
 private var inGameOrientation : Quaternion;
 
 function Start() {
-  // Checking if device has a gyroscope to enable
+  // Checks if device has a gyroscope to enable
   if (SystemInfo.supportsGyroscope) {
     Input.gyro.enabled = true;
   } 
 
-  // Used in LateUpdate function to force camera to follow player object
+  // Exists in LateUpdate function to force camera to follow player object
   cameraOffset = transform.position - player.transform.position;
 }
 
 function Update() {
-  // Retrieving gyroscopic information from phone
+  // Retrieves gyroscopic information from phone
   phoneOrientation = Input.gyro.attitude;
   correctedPhoneOrientation = new Quaternion(phoneOrientation.x, phoneOrientation.y, -phoneOrientation.z, -phoneOrientation.w);
   verticalRotationCorrection = Quaternion.AngleAxis(verticalOffsetAngle, Vector3.left);
