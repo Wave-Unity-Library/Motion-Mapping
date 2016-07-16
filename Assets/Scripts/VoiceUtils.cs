@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Ionic.Zlib;
+using NSpeex;
 
 namespace Voice {
 	
@@ -37,6 +38,29 @@ namespace Voice {
 			}
 		}
 
+		static NSpeex.SpeexEncoder nspeexEnc = new NSpeex.SpeexEncoder(NSpeex.BandMode.Wide);
+		static NSpeex.SpeexDecoder nspeexDec = new NSpeex.SpeexDecoder(NSpeex.BandMode.Wide);
+
+		public static byte[] NSpeexCompress (float[] samplesFloat, out int length) {
+			short[] samplesShort = new short[samplesFloat.Length];
+			byte[] encoded = new byte[samplesFloat.Length];
+
+			samplesFloat.ConvertToShort(samplesShort);
+			length = nspeexEnc.Encode(samplesShort, 0, samplesShort.Length, encoded, 0, encoded.Length);
+
+			return encoded;
+		}
+
+		public static float[] NSpeexDecompress (byte[] samplesByte, int dataLength) {
+			short[] samplesShort = new short[samplesByte.Length];
+			float[] decoded = new float[samplesByte.Length];
+
+			nspeexDec.Decode(samplesByte, 0, dataLength, samplesShort, 0, false);
+			samplesShort.ConverToFloat (decoded);
+
+			return decoded;
+		}
+			
 		public static byte[] ZlibCompress (byte[] input, int length) {
 			using (var ms = new System.IO.MemoryStream ()) {
 				using (var compressor = new Ionic.Zlib.ZlibStream (ms, CompressionMode.Compress, CompressionLevel.BestCompression)) {
@@ -55,6 +79,16 @@ namespace Voice {
 
 				return ms.ToArray ();
 			}
+		}
+
+		public static float[] Downsample(float[] samplesFloat, out float[] filtered) {
+			filtered = new float[samplesFloat.Length / 4];
+
+			for (int i = 3, index = 0; i < samplesFloat.Length; i += 4, index++) {
+				filtered[index] = samplesFloat[i];
+			}
+
+			return filtered;
 		}
 	}
 }
