@@ -3,8 +3,9 @@ using System.Collections;
 using UnityEngine.Networking;
 using Ionic.Zlib;
 using System;
+using Voice;
 
-public class AudioTransmitterHL : NetworkBehaviour {
+public class VoiceController : NetworkBehaviour {
 
 	private AudioSource aud;
 	private AudioClip clip;
@@ -36,7 +37,7 @@ public class AudioTransmitterHL : NetworkBehaviour {
 		if (lastPlayed >= 5000)
 			lastPlayed -= 5000;
 		
-		encoded = ZlibDecompress (encoded, encoded.Length);
+		encoded = VoiceUtils.ZlibDecompress (encoded, encoded.Length);
 		short[] samplesShort = new short[encoded.Length];
 		float[] samplesFloat = new float[encoded.Length / 4];
 
@@ -64,29 +65,6 @@ public class AudioTransmitterHL : NetworkBehaviour {
 			
 		Debug.Log ("Recording sent.");
 		lastPlayed += samplesFloat.Length;
-	}
-
-	void ConvertToShort (float[] samplesFloat, short[] samplesShort) {
-		for (int i = 0; i < samplesFloat.Length; i++) {
-			float sample = samplesFloat[i];
-			sample += 1f; // now it's in the range 0 .. 2
-			sample *= 0.5f; // now it's in the range 0 .. 1
-
-			short val = (short) Mathf.FloorToInt (sample * short.MaxValue);
-
-			samplesShort[i] = val;
-		}
-	}
-
-	void ConvertToFloat (short[] samples, float[] result) {
-		for (int i = 0; i < samples.Length; i++) {
-			float sample = samples[i];
-			sample /= (float) short.MaxValue;
-			sample *= 2f;
-			sample -= 1f;
-
-			result[i] = sample;
-		}
 	}
 
 	void StartRecording () {
@@ -121,11 +99,9 @@ public class AudioTransmitterHL : NetworkBehaviour {
 			if (!cBuffer.IsEmpty) {
 				if (playbackDelay >= 0.05f) {
 					byte[] sampleBytes = new byte[sampleBuffer.Length * 4];
-					float[] oyo = cBuffer.Dequeue ();
-					Debug.Log ("length " + oyo.Length);
-					Buffer.BlockCopy (oyo, 0, sampleBytes, 0, sampleBytes.Length);
-					//byte[] encodedWithMuLaw = EncodeToMuLaw (cBuffer.Dequeue ());
-					byte[] encodedWithZLib = ZlibCompress (sampleBytes, sampleBytes.Length);
+			
+					Buffer.BlockCopy (cBuffer.Dequeue (), 0, sampleBytes, 0, sampleBytes.Length);
+					byte[] encodedWithZLib = VoiceUtils.ZlibCompress (sampleBytes, sampleBytes.Length);
 					CmdStopRecording (encodedWithZLib);
 					playbackDelay = 0;
 				}
@@ -142,26 +118,6 @@ public class AudioTransmitterHL : NetworkBehaviour {
 			Microphone.End (null);
 			Debug.Log ("Recording ended.");
 			isTransmitting = false;
-		}
-	}
-
-	byte[] ZlibCompress (byte[] input, int length) {
-		using (var ms = new System.IO.MemoryStream ()) {
-			using (var compressor = new Ionic.Zlib.ZlibStream (ms, CompressionMode.Compress, CompressionLevel.BestCompression)) {
-				compressor.Write (input, 0, length);
-			}
-
-			return ms.ToArray ();
-		}
-	}
-
-	byte[] ZlibDecompress (byte[] input, int length) {
-		using (var ms = new System.IO.MemoryStream ()) {
-			using (var compressor = new Ionic.Zlib.ZlibStream (ms, CompressionMode.Decompress, CompressionLevel.BestCompression)) {
-				compressor.Write (input, 0, length);
-			}
-
-			return ms.ToArray ();
 		}
 	}
 }
