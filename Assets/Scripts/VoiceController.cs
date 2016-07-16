@@ -26,7 +26,8 @@ public class VoiceController : NetworkBehaviour {
 
 		Microphone.GetDeviceCaps(null, out minFreq, out maxFreq);
 
-		recordFrequency = minFreq == 0 && maxFreq == 0 ? 44100 : maxFreq;
+		recordFrequency = minFreq == 0 && maxFreq == 0 ? 44100 : 16000;
+		Debug.Log (recordFrequency);
 
 		aud = GetComponent<AudioSource> ();
 		clip = AudioClip.Create ("test", recordFrequency, 1, recordFrequency, false);
