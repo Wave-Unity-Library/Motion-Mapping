@@ -11,10 +11,17 @@ Open-source Unity asset library
   * Download our scripts.
   * Include them in the <b>Assets folder</b> of your Unity library.
   * Select the <b>Main Camera</b> object in your scene.
-  * Add our Camera Controller script as a component in the inspector panel.
+  * Add our <b>Camera Controller script</b> as a component in the inspector panel.
   * Drag a player object into the Camera Controller component.  
+   
+
+<h3> Setting up Unity Remote </h3>
+ To use a phone with the Unity editor, download Unity Remote 4 from the app store. Also be sure to modify the mobile device Unity expects. In the Unity editor, menubar, visit Edit > Project settings > Editor, and under Unity Remote, change the tab pulldown to your phone. (Android users -- you still have a gauntlet to run through. Find any of the tutorials on google).
+ 
+<h2> Real-Time Audio </h2>
+  * To be released shortly.
 
 <h2> Our Team: </h2>
-  * Jessica Ayunani
-  * Michael Laythe
-  * Jeremy Yip
+  * Jessica Ayunani / j.ayunani@gmail.com
+  * Michael Laythe / mrlaythe24@aol.com
+  * Jeremy Yip / jeremy.yip7@gmail.com
