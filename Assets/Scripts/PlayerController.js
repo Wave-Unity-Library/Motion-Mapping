@@ -1,15 +1,11 @@
 ﻿#pragma strict
 
 var speed : float;
-
-private var rb : Rigidbody;
-private var distance : int;
-
-// Variables for used in the LowPassFilter function
 var AccelerometerUpdateInterval : float = 1.0 / 60.0;
 var LowPassKernelWidthInSeconds : float = 1.0;
 var LowPassFilterFactor : float = AccelerometerUpdateInterval / LowPassKernelWidthInSeconds;
-private var lowPassValue : Vector3 = Vector3.zero;
+private var rb : Rigidbody;
+private var lowPassValue : Vector3;
 private var temp : float = 9.9;
 
 function Start() {
@@ -18,13 +14,12 @@ function Start() {
   lowPassValue = Input.acceleration;
 }
 
-// Smooths out noise from accelerometer data
 function LowPassFilterAccelerometer() : Vector3 {
+    // Smooths out noise from accelerometer data
     lowPassValue = Vector3.Lerp(lowPassValue, Input.acceleration, LowPassFilterFactor);
     return lowPassValue;
 }
 
-// Maps the player's real-world steps into in-game movement
 function FixedUpdate () {
   var movement : Vector3 = Vector3.zero;
   var accelerationDifference : float = Mathf.Abs(temp - LowPassFilterAccelerometer().magnitude);
@@ -37,12 +32,6 @@ function FixedUpdate () {
   temp = Mathf.Abs(LowPassFilterAccelerometer().magnitude);
 
   // Movement vector applied to player gameObject
+  // Maps the player's real-world steps into in-game movement
   rb.AddForce(movement * speed);
-}
-
-// Handles interaction of player and orange cubes
-function OnTriggerEnter(other : Collider) {
-    if (other.gameObject.CompareTag('Pick Up')) {
-      other.gameObject.SetActive (false);
-    }
 }
