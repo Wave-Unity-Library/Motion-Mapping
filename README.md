@@ -16,7 +16,7 @@ Open-source Unity asset library
    
 
 <h3> Setting up Unity Remote </h3>
- To use a phone with the Unity editor, download Unity Remote 4 from the app store. Also be sure to modify the mobile device Unity expects. In the Unity editor, menubar, visit Edit > Project settings > Editor, and under Unity Remote, change the tab pulldown to your phone. (Android users -- you still have a gauntlet to run through. Find any of the tutorials on google).
+ To use a phone with the Unity editor, download Unity Remote 4 from the app store. Also be sure to modify the mobile device Unity expects. In the Unity editor menubar, visit Edit > Project settings > Editor, and under Unity Remote, change the tab pulldown to your phone. (Android users -- you still have a gauntlet to run through. Find any of the tutorials on google).
  
 <h2> Real-Time Audio </h2>
   * To be released shortly.
