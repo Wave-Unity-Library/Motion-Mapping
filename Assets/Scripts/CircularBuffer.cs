@@ -4,11 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class CircularBuffer<T> {
-	private T[] buffer;
-	private int head;
-	private int tail;
-	private int bufferSize;
-	private int length;
+	T[] buffer;
+	int head;
+	int tail;
+	int bufferSize;
+	int length;
 
 	public CircularBuffer(int bufferSize) {
 		buffer = new T[bufferSize];
@@ -37,7 +37,7 @@ public class CircularBuffer<T> {
 		return dequeued;
 	}
 
-	private int NextPosition(int pos) {
+	int NextPosition(int pos) {
 		return (pos + 1) % bufferSize;
 	}
 
@@ -63,5 +63,9 @@ public class CircularBuffer<T> {
 
 	public int Length {
 		get { return length; }
+	}
+
+	public int BufferLength {
+		get { return bufferSize; }
 	}
 }

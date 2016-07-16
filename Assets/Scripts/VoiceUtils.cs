@@ -36,7 +36,7 @@ namespace Voice {
 				samplesFloat[i] = sample;
 			}
 		}
-
+			
 		public static byte[] ZlibCompress (byte[] input, int length) {
 			using (var ms = new System.IO.MemoryStream ()) {
 				using (var compressor = new Ionic.Zlib.ZlibStream (ms, CompressionMode.Compress, CompressionLevel.BestCompression)) {

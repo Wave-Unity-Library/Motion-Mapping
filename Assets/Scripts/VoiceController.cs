@@ -7,21 +7,28 @@ using Voice;
 
 public class VoiceController : NetworkBehaviour {
 
-	private AudioSource aud;
-	private AudioClip clip;
-	private CircularBuffer<float[]> cBuffer = new CircularBuffer<float[]>(20);
-	private bool isTransmitting = false;
-	private const int recordFrequency = 5000;
-	private int lastPos = 0;
-	private int lastPlayed = 0;
-	private float[] sampleBuffer;
-	private float playbackDelay = 0;
-	private bool isPlaying = false;
-	private bool shouldPlay = false;
-	private double percentPlayed = 0;
-	private float lastTime = 0;
+	AudioSource aud;
+	AudioClip clip;
+	CircularBuffer<float[]> cBuffer = new CircularBuffer<float[]>(5);
+	bool isTransmitting = false;
+	int recordFrequency;
+	int lastPos = 0;
+	int lastPlayed = 0;
+	float[] sampleBuffer;
+	float playbackDelay = 0;
+	bool isPlaying = false;
+	bool shouldPlay = false;
+	double percentPlayed = 0;
+	float lastTime = 0;
 
 	void Start () {
+		int minFreq;
+		int maxFreq;
+
+		Microphone.GetDeviceCaps(null, out minFreq, out maxFreq);
+
+		recordFrequency = minFreq == 0 && maxFreq == 0 ? 44100 : 5000;
+
 		aud = GetComponent<AudioSource> ();
 		clip = AudioClip.Create ("test", recordFrequency, 1, recordFrequency, false);
 		aud.clip = clip;
@@ -34,8 +41,8 @@ public class VoiceController : NetworkBehaviour {
 
 	[ClientRpc]
 	void RpcPlayAudio (byte[] encoded) {
-		if (lastPlayed >= 5000)
-			lastPlayed -= 5000;
+		if (lastPlayed >= recordFrequency)
+			lastPlayed -= recordFrequency;
 		
 		encoded = VoiceUtils.ZlibDecompress (encoded, encoded.Length);
 		short[] samplesShort = new short[encoded.Length];
@@ -82,12 +89,13 @@ public class VoiceController : NetworkBehaviour {
 		if (isTransmitting) {			
 			int currentPos = Microphone.GetPosition (null);
 			int diff = currentPos - lastPos;
+			int partitionSize = recordFrequency / cBuffer.BufferLength;
 
 			if (currentPos < lastPos) {
 				diff = recordFrequency - lastPos + currentPos - 1;
 			}
 
-			if (diff >= 250) {
+			if (diff >= partitionSize) {
 				sampleBuffer = new float[diff * aud.clip.channels];
 				aud.clip.GetData (sampleBuffer, lastPos);
 
