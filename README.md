@@ -25,9 +25,9 @@ Open-source Unity asset library
    * AudioSource object
    * our <b>VoiceController.cs script</b>
   
- Currently, our audio feature is configured to only work with Unity's networking through their HLAPI and was written with Unity 5 in mind. To see an example of this feature being used with the HLAPI check out the 'demo' branch of this repository.
-
- Configurable Options:
+Currently, our audio feature is configured to only work with Unity's networking through their HLAPI and was written with Unity 5 in mind. To see an example of this feature being used with the HLAPI check out the 'demo' branch of this repository.
+ 
+  Configurable Options:
    * Compression (defaults to Zlib)
    * Recording Frequency (defaults to 16000Hz)
    * Packet Sizes
