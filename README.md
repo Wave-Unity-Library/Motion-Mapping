@@ -33,9 +33,9 @@ Currently, our audio feature is configured to only work with Unity's networking 
    * Packet Sizes
    ...everything really
 
- We provide multiple compression options such as: Zlib, Opus, NSpeex, A-law with Zlib. 
+We provide multiple compression options such as: Zlib, Opus, NSpeex, A-law with Zlib. 
  
- It's easy to adjust any of the settings you desire for your game. Just go to the <b>VoiceController.cs script</b> and change the variables at the top of the file. For example, if you want to record at higher frequencies, then just change the recordFrequency variable.
+It's easy to adjust any of the settings you desire for your game. Just go to the <b>VoiceController.cs script</b> and change the variables at the top of the file. For example, if you want to record at higher frequencies, then just change the recordFrequency variable.
 
 <h2> Our Team: </h2>
   * Jessica Ayunani / j.ayunani@gmail.com
