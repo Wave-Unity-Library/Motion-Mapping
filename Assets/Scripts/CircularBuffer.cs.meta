@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Scripts/CircularBuffer.cs.meta
+guid: f13a21de9d53c4a2e897a1cd75bf97f2
+timeCreated: 1468473252
+=======
+guid: 0213c01026e9a4031b22a1385535fbd1
+timeCreated: 1467397963
+>>>>>>> 5129314a5ef6889ea34a1baec959da13e3539000:Assets/Scripts/CircularBuffer.cs.meta
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
