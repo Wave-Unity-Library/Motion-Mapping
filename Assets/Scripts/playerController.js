@@ -1,17 +1,22 @@
 ﻿#pragma strict
 
 public class playerController extends Networking.NetworkBehaviour {
-	var speed : float;
+	public var speed : float;
 
 	private var rb : Rigidbody;
 	private var distance : int;
 
 	// Variables for used in the LowPassFilter function
-	var AccelerometerUpdateInterval : float = 1.0 / 60.0;
-	var LowPassKernelWidthInSeconds : float = 1.0;
-	var LowPassFilterFactor : float = AccelerometerUpdateInterval / LowPassKernelWidthInSeconds;
+	public var AccelerometerUpdateInterval : float = 1.0 / 60.0;
+	public var LowPassKernelWidthInSeconds : float = 1.0;
+	public var LowPassFilterFactor : float = AccelerometerUpdateInterval / LowPassKernelWidthInSeconds;
 	private var lowPassValue : Vector3 = Vector3.zero;
 	private var temp : float = 9.9;
+
+	function OnStartLocalPlayer() {
+		Debug.Log("Player initialized and ready");
+		Camera.main.GetComponent.<cameraController>().target = transform;
+	}
 
 	function Start() {
 	  // accessing rigid body component of player game object
@@ -49,11 +54,5 @@ public class playerController extends Networking.NetworkBehaviour {
 	  // Movement vector applied to player gameObject
 	  rb.AddForce(movement * speed);
 	}
-
-	// Handles interaction of player and orange cubes
-	function OnTriggerEnter(other : Collider) {
-	    if (other.gameObject.CompareTag('Pick Up')) {
-	      other.gameObject.SetActive (false);
-	    }
-	}
 }
+
