@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 using Ionic.Zlib;
 using System;
 
-public class AudioTransmitterHL : NetworkBehaviour {
+public class VoiceController : NetworkBehaviour {
 
 	private AudioSource aud;
 	private AudioClip clip;
@@ -24,6 +24,13 @@ public class AudioTransmitterHL : NetworkBehaviour {
 		aud = GetComponent<AudioSource> ();
 		clip = AudioClip.Create ("test", recordFrequency, 1, recordFrequency, false);
 		aud.clip = clip;
+	}
+
+	void OnGUI() {
+		if (GUI.Button (new Rect (10, 70, 50, 30), "Click")) {
+			StartRecording ();
+		}
+			
 	}
 
 	[Command]
@@ -96,12 +103,10 @@ public class AudioTransmitterHL : NetworkBehaviour {
 	}
 
 	void Update () {
-		if (!isLocalPlayer)
-			return;
 
 		playbackDelay += Time.deltaTime;
 
-		if (isTransmitting) {			
+		if (isTransmitting) {	
 			int currentPos = Microphone.GetPosition (null);
 			int diff = currentPos - lastPos;
 
