@@ -93,6 +93,11 @@ public class VoiceController : NetworkBehaviour {
 		isTransmitting = true;
 	}
 
+	void OnGUI() {
+		if (GUI.Button (new Rect (570, 10, 150, 100), "Click"))
+			StartRecording ();
+	}
+
 	void Update () {
 		if (!isLocalPlayer)
 			return;
