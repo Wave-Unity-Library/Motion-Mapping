@@ -8,7 +8,7 @@ public class VoiceController : NetworkBehaviour {
 
 	AudioSource aud;
 	AudioClip clip;
-	CircularBuffer<float[]> cBuffer = new CircularBuffer<float[]>(10);
+	CircularBuffer<float[]> cBuffer = new CircularBuffer<float[]>(20);
 	bool isTransmitting = false;
 	const int recordFrequency = 4000;
  	int lastPos = 0;
@@ -93,6 +93,11 @@ public class VoiceController : NetworkBehaviour {
 		isTransmitting = true;
 	}
 
+	void OnGUI() {
+		if (GUI.Button (new Rect (570, 10, 150, 100), "Click"))
+			StartRecording();
+	}
+
 	void Update () {
 		if (!isLocalPlayer)
 			return;
@@ -107,7 +112,7 @@ public class VoiceController : NetworkBehaviour {
 				diff = recordFrequency - lastPos + currentPos - 1;
 			}
 
-			if (diff >= 400) {
+			if (diff >= 200) {
 				sampleBuffer = new float[diff * aud.clip.channels];
 				aud.clip.GetData (sampleBuffer, lastPos);
 
