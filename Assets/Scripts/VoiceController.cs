@@ -9,7 +9,7 @@ public class VoiceController : NetworkBehaviour {
 
 	AudioSource aud;
 	AudioClip clip;
-	CircularBuffer<float[]> cBuffer = new CircularBuffer<float[]>(5);
+	CircularBuffer<float[]> cBuffer = new CircularBuffer<float[]>(20);
 	bool isTransmitting = false;
 	int recordFrequency;
 	int lastPos = 0;
@@ -26,7 +26,7 @@ public class VoiceController : NetworkBehaviour {
 
 		Microphone.GetDeviceCaps(null, out minFreq, out maxFreq);
 
-		recordFrequency = minFreq == 0 && maxFreq == 0 ? 44100 : 16000;
+		recordFrequency = minFreq == 0 && maxFreq == 0 ? 44100 : 6000;
 
 		aud = GetComponent<AudioSource> ();
 		clip = AudioClip.Create ("test", recordFrequency, 1, recordFrequency, false);
@@ -44,7 +44,7 @@ public class VoiceController : NetworkBehaviour {
 			lastPlayed -= recordFrequency;
 
 		float[] decoded = VoiceUtils.Decompress (encoded);
-	
+
 		percentPlayed = percentPlayed + ((double) decoded.Length / aud.clip.samples);
 
 		GetComponent<AudioSource> ().clip.SetData (decoded, lastPlayed);
@@ -54,9 +54,9 @@ public class VoiceController : NetworkBehaviour {
 			aud.loop = true;
 			isPlaying = true;
 		}
-			
+
 		if (GetComponent<AudioSource> ().time >= percentPlayed) {
-//			GetComponent<AudioSource> ().Pause ();
+			//GetComponent<AudioSource> ().Pause ();
 			isPlaying = false;
 			Debug.Log ("not caught up");
 		}
@@ -64,7 +64,7 @@ public class VoiceController : NetworkBehaviour {
 		if (percentPlayed >= 1) {
 			percentPlayed = percentPlayed - 1;
 		}
-			
+
 		Debug.Log ("Recording sent.");
 		lastPlayed += decoded.Length;
 	}
@@ -74,7 +74,7 @@ public class VoiceController : NetworkBehaviour {
 		while (Microphone.GetPosition (null) < 0) {}
 		isTransmitting = true;
 	}
-
+		
 	void Update () {
 		if (!isLocalPlayer)
 			return;
@@ -95,24 +95,21 @@ public class VoiceController : NetworkBehaviour {
 
 				aud.clip.GetData (sampleBuffer, lastPos);
 
-				VoiceUtils.Downsample (sampleBuffer, out filtered);
+				cBuffer.Enqueue (sampleBuffer);
 
-				cBuffer.Enqueue (filtered);
-			
 				lastPos = currentPos;
 			}
 
 			if (!cBuffer.IsEmpty) {
 				if (playbackDelay >= 0.05f) {
-					byte[] encoded = new byte[filtered.Length * 4];
+					byte[] sampleBytes = new byte[sampleBuffer.Length * 4];
 
-					encoded = VoiceUtils.Compress (cBuffer.Dequeue ());
-
-					CmdStopRecording (encoded);
+					sampleBytes = VoiceUtils.Compress (cBuffer.Dequeue());
+					CmdStopRecording (sampleBytes);
 					playbackDelay = 0;
 				}
 			}
-				
+
 		}
 
 		if (Input.GetKeyDown (KeyCode.O)) {

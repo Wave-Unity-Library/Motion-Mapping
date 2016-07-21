@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using FragLabs.Audio.Codecs;
 using FragLabs.Audio.Codecs.Opus;
+using SnappyPI;
 
 namespace Voice {
 	
@@ -120,6 +121,8 @@ namespace Voice {
 //			return opusDec.Decode (samplesByte, length, out decodedLength);
 //		}
 
+
+
 		public static void Downsample(float[] samplesFloat, out float[] filtered) {
 			filtered = new float[samplesFloat.Length / 2];
 			int length = (2 / samplesFloat.Length) * samplesFloat.Length;
@@ -166,6 +169,13 @@ namespace Voice {
 				}
 				break;
 
+				case VoiceCompression.Snappy: {
+					byte[] encoded = ConvertToByte (samples);
+				
+					byte[] encodedWithSnappy = SnappyCodec.Compress (encoded, 0, encoded.Length);
+
+					return encodedWithSnappy;
+				}
 			}
 
 			throw new Exception ("Invalid type of compression. Check VoiceSettings and change line 15 to a valid input");
@@ -202,6 +212,14 @@ namespace Voice {
 					return decoded;
 				}
 				break;
+
+				case VoiceCompression.Snappy: {
+					byte[] decodedFromSnappy = SnappyCodec.Uncompress (encoded, 0, encoded.Length);
+
+					float[] decoded = ConvertToFloat (decodedFromSnappy);
+
+					return decoded;
+				}
 			}
 
 			throw new Exception ("Invalid type of compression. Check VoiceSettings and change line 15 to a valid input");
