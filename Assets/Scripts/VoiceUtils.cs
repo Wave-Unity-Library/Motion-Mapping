@@ -1,14 +1,19 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Ionic.Zlib;
 using NSpeex;
 using System;
+using System.Collections;
+using FragLabs.Audio.Codecs;
+using FragLabs.Audio.Codecs.Opus;
+using SnappyPI;
 
 namespace Voice {
 	
 	public static class VoiceUtils {
 
-		public static void ConvertToShort (this float[] samplesFloat, short[] samplesShort) {
+		static int length;
+
+		public static void ConvertToShort(this float[] samplesFloat, short[] samplesShort) {
 			if (samplesShort.Length < samplesFloat.Length) {
 				throw new System.ArgumentException("in's length: " + samplesFloat.Length + " out's length: " + samplesShort.Length);
 			}
@@ -24,7 +29,7 @@ namespace Voice {
 			}
 		}
 
-		public static void ConverToFloat (this short[] samplesShort, float[] samplesFloat) {
+		public static void ConverToFloat(this short[] samplesShort, float[] samplesFloat) {
 			if (samplesFloat.Length < samplesShort.Length) {
 				throw new System.ArgumentException("in's length: " + samplesShort.Length + " out's length: " + samplesFloat.Length);
 			}
@@ -39,11 +44,27 @@ namespace Voice {
 			}
 		}
 
+		public static float[] ConvertToFloat(byte[] samplesByte) {
+			float[] samplesFloat = new float[samplesByte.Length / 4];
+
+			Buffer.BlockCopy (samplesByte, 0, samplesFloat, 0, samplesByte.Length);
+
+			return samplesFloat;
+		}
+
+		public static byte[] ConvertToByte(float[] samplesFloat) {
+			byte[] samplesByte = new byte[samplesFloat.Length * 4];
+
+			Buffer.BlockCopy (samplesFloat, 0, samplesByte, 0, samplesByte.Length);
+
+			return samplesByte;
+		}
+
 		static NSpeex.SpeexEncoder nspeexEnc = new NSpeex.SpeexEncoder(NSpeex.BandMode.Narrow);
 		static NSpeex.SpeexDecoder nspeexDec = new NSpeex.SpeexDecoder(NSpeex.BandMode.Narrow);
 
-		public static byte[] NSpeexCompress (float[] samplesFloat, out int length) {
-			int sizeOfChunk = 320 * (Mathf.FloorToInt (samplesFloat.Length/320f) - 1);
+		public static byte[] NSpeexCompress(float[] samplesFloat, out int length) {
+			int sizeOfChunk = 320 * (Mathf.FloorToInt (samplesFloat.Length / 320f) - 1);
 			short[] samplesShort = new short[samplesFloat.Length];
 			short[] samplesShortForNSpeex = new short[sizeOfChunk];
 			byte[] encoded = new byte[sizeOfChunk];
@@ -59,7 +80,7 @@ namespace Voice {
 			return encoded;
 		}
 
-		public static float[] NSpeexDecompress (byte[] samplesByte, int dataLength) {
+		public static float[] NSpeexDecompress(byte[] samplesByte, int dataLength) {
 			short[] samplesShort = new short[samplesByte.Length];
 			float[] decoded = new float[samplesByte.Length];
 
@@ -69,7 +90,7 @@ namespace Voice {
 			return decoded;
 		}
 			
-		public static byte[] ZlibCompress (byte[] input, int length) {
+		public static byte[] ZlibCompress(byte[] input, int length) {
 			using (var ms = new System.IO.MemoryStream ()) {
 				using (var compressor = new Ionic.Zlib.ZlibStream (ms, CompressionMode.Compress, CompressionLevel.BestCompression)) {
 					compressor.Write (input, 0, length);
@@ -79,7 +100,7 @@ namespace Voice {
 			}
 		}
 
-		public static byte[] ZlibDecompress (byte[] input, int length) {
+		public static byte[] ZlibDecompress(byte[] input, int length) {
 			using (var ms = new System.IO.MemoryStream ()) {
 				using (var compressor = new Ionic.Zlib.ZlibStream (ms, CompressionMode.Decompress, CompressionLevel.BestCompression)) {
 					compressor.Write (input, 0, length);
@@ -89,7 +110,20 @@ namespace Voice {
 			}
 		}
 
-		public static float[] Downsample (float[] samplesFloat, out float[] filtered) {
+//		static OpusEncoder opusEnc = OpusEncoder.Create (VoiceSettings.Frequency, 1, Applications.Audio);
+//		static OpusDecoder opusDec = OpusDecoder.Create (VoiceSettings.Frequency, 1);
+
+//		public static byte[] OpusCompress(byte[] samplesByte, int length, out int encodedLength) {
+//			return opusEnc.Encode (samplesByte, length, out encodedLength);
+//		}
+//
+//		public static byte[] OpusDecompress(byte[] samplesByte, int length, out int decodedLength) {
+//			return opusDec.Decode (samplesByte, length, out decodedLength);
+//		}
+
+
+
+		public static void Downsample(float[] samplesFloat, out float[] filtered) {
 			filtered = new float[samplesFloat.Length / 2];
 			int length = (2 / samplesFloat.Length) * samplesFloat.Length;
 
@@ -103,8 +137,92 @@ namespace Voice {
 				sum /= 2;
 				filtered [index] = sum;
 			}
+		}
 
-			return filtered;
+		public static byte[] Compress(float[] samples) {
+
+			switch(VoiceSettings.Compression) {
+				case VoiceCompression.Zlib: {
+					byte[] encoded = ConvertToByte (samples);
+
+					byte[] encodedWithZLib = ZlibCompress (encoded, encoded.Length);
+
+					return encodedWithZLib;
+				}
+				break;
+
+//				case VoiceCompression.Opus: {
+//					int length;
+//					
+//					byte[] encoded = ConvertToByte (samples);
+//					
+//					byte[] encodedWithOpus = OpusCompress (encoded, encoded.Length, out length);
+//
+//					return encodedWithOpus;
+//				}
+//				break;
+
+				case VoiceCompression.NSpeex: {
+					byte[] encoded = NSpeexCompress (samples, out length);
+
+					return encoded;
+				}
+				break;
+
+				case VoiceCompression.Snappy: {
+					byte[] encoded = ConvertToByte (samples);
+				
+					byte[] encodedWithSnappy = SnappyCodec.Compress (encoded, 0, encoded.Length);
+
+					return encodedWithSnappy;
+				}
+			}
+
+			throw new Exception ("Invalid type of compression. Check VoiceSettings and change line 15 to a valid input");
+		}
+
+		public static float[] Decompress(byte[] encoded) {
+
+			switch(VoiceSettings.Decompression) {
+				case VoiceCompression.Zlib: {
+
+					encoded = ZlibDecompress (encoded, encoded.Length);
+					
+					float[] decoded = ConvertToFloat (encoded);
+
+					return decoded;
+				} 
+				break;
+
+//				case VoiceCompression.Opus: {
+//
+//					int length;
+//						
+//					encoded = OpusDecompress (encoded, encoded.Length, out length);
+//
+//					float[] decoded = ConvertToFloat (encoded);
+//
+//					return decoded;
+//				}
+//				break;
+
+				case VoiceCompression.NSpeex: {
+					float[] decoded = NSpeexDecompress (encoded, length);
+
+					return decoded;
+				}
+				break;
+
+				case VoiceCompression.Snappy: {
+					byte[] decodedFromSnappy = SnappyCodec.Uncompress (encoded, 0, encoded.Length);
+
+					float[] decoded = ConvertToFloat (decodedFromSnappy);
+
+					return decoded;
+				}
+			}
+
+			throw new Exception ("Invalid type of compression. Check VoiceSettings and change line 15 to a valid input");
 		}
 	}
 }

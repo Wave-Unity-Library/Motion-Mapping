@@ -7,8 +7,7 @@ using System.Collections.Generic;
 public class CircularBufferTests {
 	
 	[Test]
-	public void EnqueueThreeFloats()
-	{
+	public void EnqueueThreeFloats() {
 		CircularBuffer<float> queue = new CircularBuffer<float>(5);
 		queue.Enqueue(1);
 		queue.Enqueue(2);
