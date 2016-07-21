@@ -17,9 +17,6 @@ function Start() {
   if (SystemInfo.supportsGyroscope) {
     Input.gyro.enabled = true;
   } 
-
-  // Exists in LateUpdate function to force camera to follow player object
-  cameraOffset = transform.position - target.position;
 }
 
 function Update() {

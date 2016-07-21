@@ -5,7 +5,7 @@ using NSpeex;
 using System;
 
 namespace Voice {
-	
+
 	public static class VoiceUtils {
 
 		public static void ConvertToShort (this float[] samplesFloat, short[] samplesShort) {
@@ -68,7 +68,7 @@ namespace Voice {
 
 			return decoded;
 		}
-			
+
 		public static byte[] ZlibCompress (byte[] input, int length) {
 			using (var ms = new System.IO.MemoryStream ()) {
 				using (var compressor = new Ionic.Zlib.ZlibStream (ms, CompressionMode.Compress, CompressionLevel.BestCompression)) {
