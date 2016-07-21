@@ -1,5 +1,6 @@
 # Motion-Mapping
-Open-source Unity asset library
+
+![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1469118381/Wave_LogoType_ynoxdo.jpg)  
 
 <h2> Gyroscopic Camera Controller </h2>
   ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1468705961/GyroscopeController_mu7qac.gif)   
