@@ -30,7 +30,7 @@ public class CameraController : NetworkBehaviour {
 		} 
 
 		// Used in LateUpdate function to set camera to follow player object
-		//cameraOffset = transform.position - player.transform.position;
+//		cameraOffset = transform.position - player.transform.position;
 	}
 	
 	void Update () {
