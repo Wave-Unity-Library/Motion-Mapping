@@ -1,6 +1,6 @@
 ﻿#pragma strict
 
-public var speed : float;
+public var speed : float = 4;
 public var accelerometerUpdateInterval : float = 1.0 / 60.0;
 public var lowPassKernelWidthInSeconds : float = 1.0;
 public var lowPassFilterFactor : float = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
