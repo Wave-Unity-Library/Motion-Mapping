@@ -14,6 +14,15 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
     To use a phone with the Unity editor, download Unity Remote 4 from the app store. Also be sure to modify the mobile device Unity expects. In the Unity editor menubar, visit Edit > Project settings > Editor, and under Unity Remote, change the tab pulldown to your phone. (Android users -- you still have more to configure for unity remote. Find any of the tutorials on google).
   <h3> Environment Configuration </h3>
   
+<h2> Directory Structure and Descriptions</h2>
+| Name                                       | Description                                                  |
+| ------------------------------------------ | ------------------------------------------------------------ |
+| <b>Scripts</b>/cameraController.js         | Using the phone's gyroscope to control the in-game camera.   |
+| <b>Scripts</b>/playerController.js         | Using the phone's accelerometer to guide in-game movement.   |
+| <b>Scripts</b>/VoiceController.cs          | Facilitates real-time voice chat.                            |
+| <b>Plugins</b>/Ionic.Zlib.dll              | Codec for Zlib audio compression and decompression.          |
+| <b>Plugins</b>/NSpeex.dll                  | Codec for Nspeex audio compression and decompression.        |
+  
 <h2> Gyroscopic Camera Controller </h2>
    ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1468705961/GyroscopeController_mu7qac.gif)   
    In the GIF above, we're setting up an environment to use a <b>mobile phone's</b> gyroscope to control the in-game camera. Get started by following the steps below:
@@ -32,11 +41,11 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
    * Drag a player object into the Camera Controller component.  
   
 <h2> Real-Time Audio </h2>
-  Allows you to talk with your mates by providing a way to transmit your voice across a multiplayer network.
+   Allows you to talk with your mates by providing a way to transmit your voice across a multiplayer network.
    
-  To get started you'll want to add the following things to any game object you want to be able to talk in real-time:
-  * AudioSource object
-  * our <b>VoiceController.cs script</b>
+   To get started you'll want to add the following things to any game object you want to be able to talk in real-time:
+    * AudioSource object
+    * our <b>VoiceController.cs script</b>
 
 ![alt tag](http://res.cloudinary.com/dhwokgvxt/image/upload/v1469118991/Screen_Shot_2016-07-21_at_9.33.06_AM_v7tqw6.png)  
    
