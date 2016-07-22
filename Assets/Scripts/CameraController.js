@@ -1,39 +1,39 @@
 ﻿#pragma strict
 
-var player : GameObject;
-
-private var offset : Vector3;
+public var player : GameObject;
+public var slerpValue : float = .2;
+public var verticalOffsetAngle : int = -90;
+public var horizontalOffsetAngle : int = 0;
+private var cameraOffset : Vector3;
 private var phoneOrientation : Quaternion;
-private var orientationCorrection : Quaternion;
+private var correctedPhoneOrientation : Quaternion;
+private var horizontalRotationCorrection : Quaternion;
+private var verticalRotationCorrection : Quaternion;
 private var inGameOrientation : Quaternion;
 
-function Start () {
-  // Checking if device has a gyroscope to enable
+function Start() {
+  // Checks if device has a gyroscope to enable
   if (SystemInfo.supportsGyroscope) {
     Input.gyro.enabled = true;
   } 
 
-  // Used in LateUpdate function to set camera to follow player object
-  offset = transform.position - player.transform.position;
+  // Exists in LateUpdate function to force camera to follow player object
+  cameraOffset = transform.position - player.transform.position;
 }
 
-// Changes rotation of camera to reflect orientation of phone
-function Update () { 
+function Update() {
+  // Retrieves gyroscopic information from phone
   phoneOrientation = Input.gyro.attitude;
-  orientationCorrection = Quaternion.AngleAxis(-90, Vector3.left);
-  inGameOrientation = new Quaternion(phoneOrientation.x, phoneOrientation.y, -phoneOrientation.z, -phoneOrientation.w);
+  correctedPhoneOrientation = new Quaternion(phoneOrientation.x, phoneOrientation.y, -phoneOrientation.z, -phoneOrientation.w);
+  verticalRotationCorrection = Quaternion.AngleAxis(verticalOffsetAngle, Vector3.left);
+  horizontalRotationCorrection = Quaternion.AngleAxis(horizontalOffsetAngle, Vector3.up);
+  inGameOrientation = horizontalRotationCorrection * verticalRotationCorrection * correctedPhoneOrientation;
 
-  transform.rotation = Quaternion.Slerp (transform.rotation, orientationCorrection * inGameOrientation, .2);
+  // Changes orientation of in-game camera to reflect orientation of phone
+  transform.rotation = Quaternion.Slerp(transform.rotation, inGameOrientation, slerpValue);
 }
 
-// Forces camera to follow player
 function LateUpdate () {
-  transform.position = player.transform.position + offset;
+  // Forces camera to follow player
+  transform.position = player.transform.position + cameraOffset;
 }
-
-// Displays sensor information on the player screen
-function OnGUI(){
-    GUI.Label(Rect(0,0,Screen.width,Screen.height), Input.gyro.attitude.eulerAngles + '\n' 
-    + Input.gyro.attitude + '\n' 
-    + Input.acceleration + '\n');
- }
