@@ -16,8 +16,8 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
 <h2> Assets Directory Structure and Descriptions</h2>
 | Name                                       | Description                                                       |
 | ------------------------------------------ | ----------------------------------------------------------------- |
-| <b>Scripts</b>/CameraController.js         | Using the phone's gyroscope to control the in-game camera.        |
-| <b>Scripts</b>/PlayerController.js         | Using the phone's accelerometer to guide in-game movement.        |
+| <b>Scripts</b>/CameraController.js         | Use the phone's gyroscope to control the in-game camera.        |
+| <b>Scripts</b>/PlayerController.js         | Use the phone's accelerometer to guide in-game movement.        |
 | <b>Scripts</b>/VoiceController.cs          | Facilitates real-time voice chat.                                 |
 | <b>Scripts</b>/VoiceUtils.cs               | Various compression and typecasting methods for audio info.       |
 | <b>Scripts</b>/VoiceCompression.cs         | Provides a list of audio codecs used in VoiceSettings.cs.         |
@@ -37,8 +37,8 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
    * Drag a player object into the Camera Controller component.  
   
 <h2> Translational Movement with Accelerometer  </h2>
-   ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1469215988/Accelerometer_oh2uj8.gif)
-   This feature is an experimental build that works, but may require tweaking depending on the mobile phone. The idea is that when you move in the physical world, your in-game character moves as well. Get started by following the steps below:
+   ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1469215988/Accelerometer_oh2uj8.gif)  
+   The idea of this feature is that when you move in the physical world, your in-game character moves as well. Using information from the mobile phone's accelerometer, we attempt to simulate walking movements in the Unity game engine.  It's still experimental, but it works and may require tweaking depending on the mobile phone. Get started by following the steps below:
    * Download our scripts.
    * Include them in the <b>Assets folder</b> of your Unity library.
    * Select the <b>Player</b> object in your scene.
