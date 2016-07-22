@@ -1,7 +1,7 @@
 ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1469118381/Wave_LogoType_ynoxdo.jpg)  
 
 # Wave: A Unity Asset Library
-We want <b>mobile gaming</b> to be a more immersive and interactive experience, so we designed Wave, an open source <b>Unity game engine Asset</b> that makes 2 game dev features tremendously more accessible: <i>elements of motion tracking</i> for character control and <i>real-time audio streaming</i> between multiple devices.
+We want <b>mobile gaming</b> to be a more immersive and interactive experience, so we designed Wave. It's an open source <b>Unity game engine Asset</b> that makes 2 game dev features tremendously more accessible: <i>elements of motion tracking</i> for character control and <i>real-time audio streaming</i> between multiple devices.
 
 <h2> Prerequisites </h2>
    * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_25/v1469119124/20100523235954_Unity_logo_va96rl.png) <a href="https://unity3d.com/get-unity/download">Unity 5</a>
@@ -13,12 +13,14 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
   <h3> Setting up Unity Remote </h3>
     To use a phone with the Unity editor, download Unity Remote 4 from the app store. Also be sure to modify the mobile device Unity expects. In the Unity editor menubar, visit Edit > Project settings > Editor, and under Unity Remote, change the tab pulldown to your phone. (Android users -- you still have more to configure for unity remote. Find any of the tutorials on google).
   
-<h2> Directory Structure and Descriptions</h2>
+<h2> Assets Directory Structure and Descriptions</h2>
 | Name                                       | Description                                                  |
 | ------------------------------------------ | ------------------------------------------------------------ |
-| <b>Scripts</b>/cameraController.js         | Using the phone's gyroscope to control the in-game camera.   |
-| <b>Scripts</b>/playerController.js         | Using the phone's accelerometer to guide in-game movement.   |
+| <b>Scripts</b>/CameraController.js         | Using the phone's gyroscope to control the in-game camera.   |
+| <b>Scripts</b>/PlayerController.js         | Using the phone's accelerometer to guide in-game movement.   |
 | <b>Scripts</b>/VoiceController.cs          | Facilitates real-time voice chat.                            |
+| <b>Scripts</b>/VoiceUtils.cs               | Various compression and typecasting methods for audio info.  |
+| <b>Scripts</b>/VoiceCompression.cs         | Edit this file to select different codec options.            |
 | <b>Plugins</b>/Ionic.Zlib.dll              | Codec for Zlib audio compression and decompression.          |
 | <b>Plugins</b>/NSpeex.dll                  | Codec for Nspeex audio compression and decompression.        |
   
