@@ -121,8 +121,6 @@ namespace Voice {
 //			return opusDec.Decode (samplesByte, length, out decodedLength);
 //		}
 
-
-
 		public static void Downsample(float[] samplesFloat, out float[] filtered) {
 			filtered = new float[samplesFloat.Length / 2];
 			int length = (2 / samplesFloat.Length) * samplesFloat.Length;
@@ -139,15 +137,15 @@ namespace Voice {
 			}
 		}
 
-		public static byte[] Compress(float[] samples) {
+		public static VoicePacket Compress(float[] samples) {
+			VoicePacket packet = new VoicePacket ();
+			packet.compression = VoiceSettings.Compression;
 
-			switch(VoiceSettings.Compression) {
+			switch(packet.compression) {
 				case VoiceCompression.Zlib: {
 					byte[] encoded = ConvertToByte (samples);
 
-					byte[] encodedWithZLib = ZlibCompress (encoded, encoded.Length);
-
-					return encodedWithZLib;
+					packet.data = ZlibCompress (encoded, encoded.Length);
 				}
 				break;
 
@@ -163,32 +161,29 @@ namespace Voice {
 //				break;
 
 				case VoiceCompression.NSpeex: {
-					byte[] encoded = NSpeexCompress (samples, out length);
-
-					return encoded;
+					packet.data = NSpeexCompress (samples, out length);
 				}
 				break;
 
 				case VoiceCompression.Snappy: {
 					byte[] encoded = ConvertToByte (samples);
 				
-					byte[] encodedWithSnappy = SnappyCodec.Compress (encoded, 0, encoded.Length);
-
-					return encodedWithSnappy;
+					packet.data = SnappyCodec.Compress (encoded, 0, encoded.Length);
 				}
+				break;
 			}
 
-			throw new Exception ("Invalid type of compression. Check VoiceSettings and change line 15 to a valid input");
+			return packet;
 		}
 
-		public static float[] Decompress(byte[] encoded) {
+		public static float[] Decompress(VoicePacket packet) {
 
 			switch(VoiceSettings.Decompression) {
 				case VoiceCompression.Zlib: {
 
-					encoded = ZlibDecompress (encoded, encoded.Length);
+					packet.data = ZlibDecompress (packet.data, packet.data.Length);
 					
-					float[] decoded = ConvertToFloat (encoded);
+					float[] decoded = ConvertToFloat (packet.data);
 
 					return decoded;
 				} 
@@ -207,22 +202,23 @@ namespace Voice {
 //				break;
 
 				case VoiceCompression.NSpeex: {
-					float[] decoded = NSpeexDecompress (encoded, length);
+					float[] decoded = NSpeexDecompress (packet.data, length);
 
 					return decoded;
 				}
 				break;
 
 				case VoiceCompression.Snappy: {
-					byte[] decodedFromSnappy = SnappyCodec.Uncompress (encoded, 0, encoded.Length);
+					byte[] decodedFromSnappy = SnappyCodec.Uncompress (packet.data, 0, packet.data.Length);
 
 					float[] decoded = ConvertToFloat (decodedFromSnappy);
 
 					return decoded;
 				}
+				break;
 			}
 
-			throw new Exception ("Invalid type of compression. Check VoiceSettings and change line 15 to a valid input");
+			return new float[0];
 		}
 	}
 }

@@ -34,12 +34,12 @@ public class VoiceController : NetworkBehaviour {
 	}
 
 	[Command]
-	void CmdStopRecording (byte[] encoded) {
+	void CmdStopRecording (VoicePacket encoded) {
 		RpcPlayAudio(encoded);
 	}
 
 	[ClientRpc]
-	void RpcPlayAudio (byte[] encoded) {
+	void RpcPlayAudio (VoicePacket encoded) {
 		if (lastPlayed >= recordFrequency)
 			lastPlayed -= recordFrequency;
 
@@ -104,8 +104,8 @@ public class VoiceController : NetworkBehaviour {
 				if (playbackDelay >= 0.05f) {
 					byte[] sampleBytes = new byte[sampleBuffer.Length * 4];
 
-					sampleBytes = VoiceUtils.Compress (cBuffer.Dequeue());
-					CmdStopRecording (sampleBytes);
+					VoicePacket packet = VoiceUtils.Compress (cBuffer.Dequeue());
+					CmdStopRecording (packet);
 					playbackDelay = 0;
 				}
 			}
