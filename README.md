@@ -12,7 +12,6 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
 <h2> Getting Started </h2>
   <h3> Setting up Unity Remote </h3>
     To use a phone with the Unity editor, download Unity Remote 4 from the app store. Also be sure to modify the mobile device Unity expects. In the Unity editor menubar, visit Edit > Project settings > Editor, and under Unity Remote, change the tab pulldown to your phone. (Android users -- you still have more to configure for unity remote. Find any of the tutorials on google).
-  <h3> Environment Configuration </h3>
   
 <h2> Directory Structure and Descriptions</h2>
 | Name                                       | Description                                                  |
@@ -33,11 +32,11 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
    * Drag a player object into the Camera Controller component.  
   
 <h2> Translational Movement with Accelerometer  </h2>
-   In the GIF above, we're setting up an environment to use a <b>mobile phone's</b> gyroscope to control the in-game camera. Get started by following the steps below:
+   This feature is an experimental build that works, but may require tweaking depending on the mobile phone. The idea is that when you move in the physical world, your in-game character moves as well. Get started by following the steps below:
    * Download our scripts.
    * Include them in the <b>Assets folder</b> of your Unity library.
-   * Select the <b>Main Camera</b> object in your scene.
-   * Add our <b>Camera Controller script</b> as a component in the inspector panel.
+   * Select the <b>Player</b> object in your scene.
+   * Add our <b>Player Controller script</b> as a component in the inspector panel.
    * Drag a player object into the Camera Controller component.  
   
 <h2> Real-Time Audio </h2>
@@ -62,6 +61,9 @@ We provide multiple compression options such as: Zlib, Opus, NSpeex, A-law with 
 ![alt tag](http://res.cloudinary.com/dhwokgvxt/image/upload/v1469118985/Screen_Shot_2016-07-21_at_9.27.54_AM_aho1lh.png)  
   
  It's easy to adjust any of the settings you desire for your game. Just go to the <b>VoiceController.cs script</b> and change the variables at the top of the file. For example, if you want to record at higher frequencies, then just change the recordFrequency variable.
+ 
+<h2> Contribute </h2> 
+   If anything is unclear or unintuitive, feel free to contact us. We heartily welcome pull requests because, again, this is an open source project. Any contributions will be documented.
  
 <h2> Our Team </h2>
    * Jessica Ayunani - j.ayunani@gmail.com
