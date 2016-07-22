@@ -37,6 +37,7 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
    * Drag a player object into the Camera Controller component.  
   
 <h2> Translational Movement with Accelerometer  </h2>
+   ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1469215988/Accelerometer_oh2uj8.gif)
    This feature is an experimental build that works, but may require tweaking depending on the mobile phone. The idea is that when you move in the physical world, your in-game character moves as well. Get started by following the steps below:
    * Download our scripts.
    * Include them in the <b>Assets folder</b> of your Unity library.
