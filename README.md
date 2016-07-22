@@ -1,7 +1,7 @@
 ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1469118381/Wave_LogoType_ynoxdo.jpg)  
 
 # Wave: A Unity Asset Library
-We want <b>mobile gaming</b> to be a more immersive and interactive experience, so we designed Wave, an open source <b>Unity game engine Asset</b> that makes 2 game dev features tremendously more accessible: <i>elements of motion tracking</i> for character control and <i>real-time audio streaming</i> between multiple devices.
+We want <b>mobile gaming</b> to be a more immersive and interactive experience, so we designed Wave. It's an open source <b>Unity game engine Asset</b> that makes 2 game dev features tremendously more accessible: <i>elements of motion tracking</i> for character control and <i>real-time audio streaming</i> between multiple devices.
 
 <h2> Prerequisites </h2>
    * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_25/v1469119124/20100523235954_Unity_logo_va96rl.png) <a href="https://unity3d.com/get-unity/download">Unity 5</a>
@@ -12,16 +12,20 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
 <h2> Getting Started </h2>
   <h3> Setting up Unity Remote </h3>
     To use a phone with the Unity editor, download Unity Remote 4 from the app store. Also be sure to modify the mobile device Unity expects. In the Unity editor menubar, visit Edit > Project settings > Editor, and under Unity Remote, change the tab pulldown to your phone. (Android users -- you still have more to configure for unity remote. Find any of the tutorials on google).
-  <h3> Environment Configuration </h3>
   
-<h2> Directory Structure and Descriptions</h2>
-| Name                                       | Description                                                  |
-| ------------------------------------------ | ------------------------------------------------------------ |
-| <b>Scripts</b>/cameraController.js         | Using the phone's gyroscope to control the in-game camera.   |
-| <b>Scripts</b>/playerController.js         | Using the phone's accelerometer to guide in-game movement.   |
-| <b>Scripts</b>/VoiceController.cs          | Facilitates real-time voice chat.                            |
-| <b>Plugins</b>/Ionic.Zlib.dll              | Codec for Zlib audio compression and decompression.          |
-| <b>Plugins</b>/NSpeex.dll                  | Codec for Nspeex audio compression and decompression.        |
+<h2> Assets Directory Structure and Descriptions</h2>
+| Name                                       | Description                                                       |
+| ------------------------------------------ | ----------------------------------------------------------------- |
+| <b>Scripts</b>/CameraController.js         | Using the phone's gyroscope to control the in-game camera.        |
+| <b>Scripts</b>/PlayerController.js         | Using the phone's accelerometer to guide in-game movement.        |
+| <b>Scripts</b>/VoiceController.cs          | Facilitates real-time voice chat.                                 |
+| <b>Scripts</b>/VoiceUtils.cs               | Various compression and typecasting methods for audio info.       |
+| <b>Scripts</b>/VoiceCompression.cs         | Provides a list of audio codecs used in VoiceSettings.cs.         |
+| <b>Scripts</b>/VoiceSettings.cs            | <b>Edit this file</b> to select and implement different codecs.   |
+| <b>Scripts</b>/CircularBuffer.cs           | Used to prevent dynamic memory allocation when sending audio data.|
+| <b>Plugins</b>/Ionic.Zlib.dll              | Codec for Zlib audio compression and decompression.               |
+| <b>Plugins</b>/NSpeex.dll                  | Codec for Nspeex audio compression and decompression.             |
+| <b>Plugins</b>/Snappy                      | Codec for Snappy audio compression and decompression.             |
   
 <h2> Gyroscopic Camera Controller </h2>
    ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1468705961/GyroscopeController_mu7qac.gif)   
@@ -33,11 +37,11 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
    * Drag a player object into the Camera Controller component.  
   
 <h2> Translational Movement with Accelerometer  </h2>
-   In the GIF above, we're setting up an environment to use a <b>mobile phone's</b> gyroscope to control the in-game camera. Get started by following the steps below:
+   This feature is an experimental build that works, but may require tweaking depending on the mobile phone. The idea is that when you move in the physical world, your in-game character moves as well. Get started by following the steps below:
    * Download our scripts.
    * Include them in the <b>Assets folder</b> of your Unity library.
-   * Select the <b>Main Camera</b> object in your scene.
-   * Add our <b>Camera Controller script</b> as a component in the inspector panel.
+   * Select the <b>Player</b> object in your scene.
+   * Add our <b>Player Controller script</b> as a component in the inspector panel.
    * Drag a player object into the Camera Controller component.  
   
 <h2> Real-Time Audio </h2>
@@ -63,7 +67,10 @@ We provide multiple compression options such as: Zlib, Opus, NSpeex, A-law with 
   
  It's easy to adjust any of the settings you desire for your game. Just go to the <b>VoiceController.cs script</b> and change the variables at the top of the file. For example, if you want to record at higher frequencies, then just change the recordFrequency variable.
  
+<h2> Contribute </h2> 
+   If anything is unclear or unintuitive, feel free to contact us. We heartily welcome pull requests because, again, this is an open source project. Any contributions will be documented.
+ 
 <h2> Our Team </h2>
-   * Jessica Ayunani - j.ayunani@gmail.com
-   * Michael Laythe - mrlaythe24@aol.com
-   * Jeremy Yip - jeremy.yip7@gmail.com
+   * Jessica Ayunani - github.com/jayunani
+   * Michael Laythe - github.com/mlaythe
+   * Jeremy Yip - github.com/jeyip
