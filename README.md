@@ -32,21 +32,25 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
    * Drag a player object into the Camera Controller component.  
   
 <h2> Real-Time Audio </h2>
-   Allows you to talk with your mates by providing a way to transmit your voice across a multiplayer network.
+  Allows you to talk with your mates by providing a way to transmit your voice across a multiplayer network.
    
-   To get started you'll want to add the following things to any game object you want to be able to talk in real-time:
-    * AudioSource object
-    * our <b>VoiceController.cs script</b>
+  To get started you'll want to add the following things to any game object you want to be able to talk in real-time:
+  * AudioSource object
+  * our <b>VoiceController.cs script</b>
+
+![alt tag](http://res.cloudinary.com/dhwokgvxt/image/upload/v1469118991/Screen_Shot_2016-07-21_at_9.33.06_AM_v7tqw6.png)  
    
  Currently, our audio feature is configured to only work with Unity's networking through their HLAPI and was written with Unity 5 in mind. To see an example of this feature being used with the HLAPI check out the 'demo' branch of this repository.
   
-   Configurable Options:
-    * Compression (defaults to Zlib)
-    * Recording Frequency (defaults to 16000Hz)
-    * Packet Sizes
-    ...everything really
+ Configurable Options:
+ * Compression (defaults to Zlib)
+ * Recording Frequency (defaults to 16000Hz)
+ * Packet Sizes
+ ...everything really
  
- We provide multiple compression options such as: Zlib, Opus, NSpeex, A-law with Zlib. 
+We provide multiple compression options such as: Zlib, Opus, NSpeex, A-law with Zlib. 
+
+![alt tag](http://res.cloudinary.com/dhwokgvxt/image/upload/v1469118985/Screen_Shot_2016-07-21_at_9.27.54_AM_aho1lh.png)  
   
  It's easy to adjust any of the settings you desire for your game. Just go to the <b>VoiceController.cs script</b> and change the variables at the top of the file. For example, if you want to record at higher frequencies, then just change the recordFrequency variable.
  
