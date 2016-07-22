@@ -1,26 +1,29 @@
 ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1469118381/Wave_LogoType_ynoxdo.jpg)  
-# Motion-mapping and real-time audio communication
-  <h2> Prerequisites </h2>
-    * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_25/v1469119124/20100523235954_Unity_logo_va96rl.png) <a href="https://unity3d.com/get-unity/download">Unity 5</a>
- -  * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_20/v1469118908/Windows_logo_-_2012_byfabw.png) <b>Windows</b> 7 SP1+, 8, 10
- -  * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_25/v1469118917/Apple-icon_lo0q8q.png) <b>Mac OS X</b> 10.8+
- +  * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_20/v1469118908/Windows_logo_-_2012_byfabw.png) <b>Windows</b>: 7 SP1+, 8, 10
- +  * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_25/v1469118917/Apple-icon_lo0q8q.png) <b>Mac OS X</b>: 10.8+
+
+# Wave: A Unity Asset Library
+We want <b>mobile gaming</b> to be a more immersive and interactive experience, so we designed Wave, an open source <b>Unity game engine Asset</b> that makes 2 game dev features tremendously more accessible: <i>elements of motion tracking</i> for character control and <i>real-time audio streaming</i> between multiple devices.
+
+<h2> Prerequisites </h2>
+   * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_25/v1469119124/20100523235954_Unity_logo_va96rl.png) <a href="https://unity3d.com/get-unity/download">Unity 5</a>
+   * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_20/v1469118908/Windows_logo_-_2012_byfabw.png) <b>Windows</b>: 7 SP1+, 8, 10
+   * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_25/v1469118917/Apple-icon_lo0q8q.png) <b>iOS</b>: Mac OSX 10.8+ with <a href="https://itunes.apple.com/us/app/xcode/id497799835?mt=12">Xcode</a>
+   * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_20/v1469123670/Android_robot.svg_o9anin.png) <b>Android</b>: <a href="https://developer.android.com/studio/index.html">Android SDK</a>
+
+<h2> Getting Started </h2>
+  <h3> Setting up Unity Remote </h3>
+    To use a phone with the Unity editor, download Unity Remote 4 from the app store. Also be sure to modify the mobile device Unity expects. In the Unity editor menubar, visit Edit > Project settings > Editor, and under Unity Remote, change the tab pulldown to your phone. (Android users -- you still have more to configure for unity remote. Find any of the tutorials on google).
+  <h3> Environment Configuration </h3>
   
-  <h2> Gyroscopic Camera Controller </h2>
-    ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1468705961/GyroscopeController_mu7qac.gif)   
+<h2> Gyroscopic Camera Controller </h2>
+   ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1468705961/GyroscopeController_mu7qac.gif)   
    In the GIF above, we're setting up an environment to use a <b>mobile phone's</b> gyroscope to control the in-game camera. Get started by following the steps below:
    * Download our scripts.
    * Include them in the <b>Assets folder</b> of your Unity library.
    * Select the <b>Main Camera</b> object in your scene.
    * Add our <b>Camera Controller script</b> as a component in the inspector panel.
    * Drag a player object into the Camera Controller component.  
-    
- 
- <h3> Setting up Unity Remote </h3>
-  To use a phone with the Unity editor, download Unity Remote 4 from the app store. Also be sure to modify the mobile device Unity expects. In the Unity editor menubar, visit Edit > Project settings > Editor, and under Unity Remote, change the tab pulldown to your phone. (Android users -- you still have more to configure for unity remote. Find any of the tutorials on google).
   
-  <h2> Translational Movement with  </h2>
+<h2> Translational Movement with Accelerometer  </h2>
    In the GIF above, we're setting up an environment to use a <b>mobile phone's</b> gyroscope to control the in-game camera. Get started by following the steps below:
    * Download our scripts.
    * Include them in the <b>Assets folder</b> of your Unity library.
@@ -28,7 +31,7 @@
    * Add our <b>Camera Controller script</b> as a component in the inspector panel.
    * Drag a player object into the Camera Controller component.  
   
- <h2> Real-Time Audio </h2>
+<h2> Real-Time Audio </h2>
    Allows you to talk with your mates by providing a way to transmit your voice across a multiplayer network.
    
    To get started you'll want to add the following things to any game object you want to be able to talk in real-time:
@@ -47,7 +50,7 @@
   
  It's easy to adjust any of the settings you desire for your game. Just go to the <b>VoiceController.cs script</b> and change the variables at the top of the file. For example, if you want to record at higher frequencies, then just change the recordFrequency variable.
  
- <h2> Our Team: </h2>
-   * Jessica Ayunani / j.ayunani@gmail.com
-   * Michael Laythe / mrlaythe24@aol.com
-   * Jeremy Yip / jeremy.yip7@gmail.com
+<h2> Our Team </h2>
+   * Jessica Ayunani - j.ayunani@gmail.com
+   * Michael Laythe - mrlaythe24@aol.com
+   * Jeremy Yip - jeremy.yip7@gmail.com
