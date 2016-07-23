@@ -4,8 +4,8 @@
 We want <b>mobile gaming</b> to be a more immersive and interactive experience, so we designed Wave. It's an open source <b>Unity game engine Asset</b> that makes 2 game dev features tremendously more accessible: <i>elements of motion tracking</i> for character control and <i>real-time audio streaming</i> between multiple devices. Check out a 2-minute demo video <a href="https://www.youtube.com/watch?v=56wYgaHN8r8&feature=youtu.be">here</a>. 
 
 ## Table of Contents  
-[Prerequisites](https://github.com/Wave-Unity-Library/Motion-Mapping/edit/master/README.md#Prerequisites)  
-[Getting Started](https://github.com/Wave-Unity-Library/Motion-Mapping/edit/master/README.md#getting-started)
+[Prerequisites](https://github.com/Wave-Unity-Library/Motion-Mapping/blob/master/README.md#Prerequisites)  
+[Getting Started](https://github.com/Wave-Unity-Library/Motion-Mapping/blob/master/README.md#getting-started)
 
 ##Prerequisites
 
