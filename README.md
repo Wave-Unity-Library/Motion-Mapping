@@ -3,7 +3,12 @@
 # Wave: A Unity Asset Library
 We want <b>mobile gaming</b> to be a more immersive and interactive experience, so we designed Wave. It's an open source <b>Unity game engine Asset</b> that makes 2 game dev features tremendously more accessible: <i>elements of motion tracking</i> for character control and <i>real-time audio streaming</i> between multiple devices. Check out a 2-minute demo video <a href="https://www.youtube.com/watch?v=56wYgaHN8r8&feature=youtu.be">here</a>. 
 
-<h2> Prerequisites </h2>
+##### Table of Contents  
+[Prerequisites](#Prerequisites)  
+<a name="Prerequisites"/>
+
+##Prerequisites
+
    * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_25/v1469119124/20100523235954_Unity_logo_va96rl.png) <a href="https://unity3d.com/get-unity/download">Unity 5</a>
    * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_20/v1469118908/Windows_logo_-_2012_byfabw.png) <b>Windows</b>: 7 SP1+, 8, 10
    * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_25/v1469118917/Apple-icon_lo0q8q.png) <b>iOS</b>: Mac OSX 10.8+ with <a href="https://itunes.apple.com/us/app/xcode/id497799835?mt=12">Xcode</a>
