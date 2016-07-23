@@ -5,7 +5,13 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
 
 ## Table of Contents  
 [Prerequisites](#prerequisites) </br>
-[Getting Started](#getting-started)
+[Getting Started](#getting-started) </br>
+[Gyroscopic Camera Controller](#gyro-cam) </br>
+[Translational Movement with Accelerometer](#translational-movement) </br>
+[Real Time Audio](#real-time-audio) </br>
+[Assets Directory](#assets-directory) </br>
+[Contribute](#contribute) </br>
+[Team](#team)
 
 <h2> <a name="prerequisites"></a> Prerequisites </h2>
 
@@ -18,7 +24,7 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
   <h3> Setting up Unity Remote </h3>
     To use a phone with the Unity editor, download Unity Remote 4 from the app store. Also be sure to modify the mobile device Unity expects. In the Unity editor menubar, visit Edit > Project settings > Editor, and under Unity Remote, change the tab pulldown to your phone. (Android users -- you still have more to configure for unity remote. Find any of the tutorials on google).
   
-<h2> Gyroscopic Camera Controller </h2>
+<h2> <a name="gyro-cam"></a> Gyroscopic Camera Controller </h2>
    ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1468705961/GyroscopeController_mu7qac.gif)   
    In the GIF above, we're setting up an environment to use a <b>mobile phone's</b> gyroscope to control the in-game camera. Get started by following the steps below:
    * Download our scripts.
@@ -27,7 +33,7 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
    * Add our <b>Camera Controller script</b> as a component in the inspector panel.
    * Drag a player object into the Camera Controller component.  
   
-<h2> Translational Movement with Accelerometer  </h2>
+<h2> <a name="translational-movement"></a> Translational Movement with Accelerometer  </h2>
    ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1469215988/Accelerometer_oh2uj8.gif)  
    The idea of this feature is that when you move in the physical world, your in-game character moves as well. Using information from the mobile phone's accelerometer, we attempt to simulate walking movements in the Unity game engine.  It's still experimental, but it works and may require tweaking depending on the mobile phone. Get started by following the steps below:
    * Download our scripts.
@@ -36,7 +42,7 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
    * Add our <b>Player Controller script</b> as a component in the inspector panel.
    * Drag a player object into the Camera Controller component.  
   
-<h2> Real-Time Audio </h2>
+<h2> <a name="real-time-audio"></a> Real-Time Audio </h2>
    Allows you to talk with your mates by providing a way to transmit your voice across a multiplayer network.
    
    To get started you'll want to add the following things to any game object you want to be able to talk in real-time:
@@ -59,7 +65,7 @@ We provide multiple compression options such as: Zlib, Opus, NSpeex, A-law with 
   
  It's easy to adjust any of the settings you desire for your game. Just go to the <b>VoiceController.cs script</b> and change the variables at the top of the file. For example, if you want to record at higher frequencies, then just change the recordFrequency variable.
  
-<h2> Assets Directory Structure and Descriptions</h2>
+<h2> <a name="assets-directory"></a> Assets Directory Structure and Descriptions</h2>
 | Name                                       | Description                                                       |
 | ------------------------------------------ | ----------------------------------------------------------------- |
 | <b>Scripts</b>/CameraController.js         | Use the phone's gyroscope to control the in-game camera.          |
@@ -73,10 +79,10 @@ We provide multiple compression options such as: Zlib, Opus, NSpeex, A-law with 
 | <b>Plugins</b>/NSpeex.dll                  | Codec for Nspeex audio compression and decompression.             |
 | <b>Plugins</b>/Snappy                      | Codec for Snappy audio compression and decompression.             |
 
-<h2> Contribute </h2> 
+<h2> <a name="contribute"></a> Contribute </h2> 
    If anything is unclear or unintuitive, feel free to contact us. We heartily welcome pull requests because, again, this is an open source project. Any contributions will be documented.
  
-<h2> Our Team </h2>
+<h2> <a name="name"></a> Our Team </h2>
    * Jessica Ayunani - github.com/jayunani
    * Michael Laythe - github.com/mlaythe
    * Jeremy Yip - github.com/jeyip
