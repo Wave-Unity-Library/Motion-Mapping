@@ -4,7 +4,8 @@
 We want <b>mobile gaming</b> to be a more immersive and interactive experience, so we designed Wave. It's an open source <b>Unity game engine Asset</b> that makes 2 game dev features tremendously more accessible: <i>elements of motion tracking</i> for character control and <i>real-time audio streaming</i> between multiple devices. Check out a 2-minute demo video <a href="https://www.youtube.com/watch?v=56wYgaHN8r8&feature=youtu.be">here</a>. 
 
 ## Table of Contents  
-[Prerequisites](#prerequisites)
+[Prerequisites](#prerequisites) </br>
+[Getting Started](#getting-started)
 
 <h2> <a name="prerequisites"></a> Prerequisites </h2>
 
@@ -13,7 +14,7 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
    * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_25/v1469118917/Apple-icon_lo0q8q.png) <b>iOS</b>: Mac OSX 10.8+ with <a href="https://itunes.apple.com/us/app/xcode/id497799835?mt=12">Xcode</a>
    * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_20/v1469123670/Android_robot.svg_o9anin.png) <b>Android</b>: <a href="https://developer.android.com/studio/index.html">Android SDK</a>
 
-# <a href="getting-started"></a> Getting Started 
+<h2> <a name="getting-started"></a> Getting Started </h2>
   <h3> Setting up Unity Remote </h3>
     To use a phone with the Unity editor, download Unity Remote 4 from the app store. Also be sure to modify the mobile device Unity expects. In the Unity editor menubar, visit Edit > Project settings > Editor, and under Unity Remote, change the tab pulldown to your phone. (Android users -- you still have more to configure for unity remote. Find any of the tutorials on google).
   
