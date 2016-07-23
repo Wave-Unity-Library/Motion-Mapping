@@ -13,20 +13,6 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
   <h3> Setting up Unity Remote </h3>
     To use a phone with the Unity editor, download Unity Remote 4 from the app store. Also be sure to modify the mobile device Unity expects. In the Unity editor menubar, visit Edit > Project settings > Editor, and under Unity Remote, change the tab pulldown to your phone. (Android users -- you still have more to configure for unity remote. Find any of the tutorials on google).
   
-<h2> Assets Directory Structure and Descriptions</h2>
-| Name                                       | Description                                                       |
-| ------------------------------------------ | ----------------------------------------------------------------- |
-| <b>Scripts</b>/CameraController.js         | Use the phone's gyroscope to control the in-game camera.        |
-| <b>Scripts</b>/PlayerController.js         | Use the phone's accelerometer to guide in-game movement.        |
-| <b>Scripts</b>/VoiceController.cs          | Facilitates real-time voice chat.                                 |
-| <b>Scripts</b>/VoiceUtils.cs               | Various compression and typecasting methods for audio info.       |
-| <b>Scripts</b>/VoiceCompression.cs         | Provides a list of audio codecs used in VoiceSettings.cs.         |
-| <b>Scripts</b>/VoiceSettings.cs            | <b>Edit this file</b> to select and implement different codecs.   |
-| <b>Scripts</b>/CircularBuffer.cs           | Used to prevent dynamic memory allocation when sending audio data.|
-| <b>Plugins</b>/Ionic.Zlib.dll              | Codec for Zlib audio compression and decompression.               |
-| <b>Plugins</b>/NSpeex.dll                  | Codec for Nspeex audio compression and decompression.             |
-| <b>Plugins</b>/Snappy                      | Codec for Snappy audio compression and decompression.             |
-  
 <h2> Gyroscopic Camera Controller </h2>
    ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1468705961/GyroscopeController_mu7qac.gif)   
    In the GIF above, we're setting up an environment to use a <b>mobile phone's</b> gyroscope to control the in-game camera. Get started by following the steps below:
@@ -68,6 +54,20 @@ We provide multiple compression options such as: Zlib, Opus, NSpeex, A-law with 
   
  It's easy to adjust any of the settings you desire for your game. Just go to the <b>VoiceController.cs script</b> and change the variables at the top of the file. For example, if you want to record at higher frequencies, then just change the recordFrequency variable.
  
+<h2> Assets Directory Structure and Descriptions</h2>
+| Name                                       | Description                                                       |
+| ------------------------------------------ | ----------------------------------------------------------------- |
+| <b>Scripts</b>/CameraController.js         | Use the phone's gyroscope to control the in-game camera.          |
+| <b>Scripts</b>/PlayerController.js         | Use the phone's accelerometer to guide in-game movement.          |
+| <b>Scripts</b>/VoiceController.cs          | Facilitates real-time voice chat.                                 |
+| <b>Scripts</b>/VoiceUtils.cs               | Various compression and typecasting methods for audio info.       |
+| <b>Scripts</b>/VoiceCompression.cs         | Provides a list of audio codecs used in VoiceSettings.cs.         |
+| <b>Scripts</b>/VoiceSettings.cs            | <b>Edit this file</b> to select and implement different codecs.   |
+| <b>Scripts</b>/CircularBuffer.cs           | Used to prevent dynamic memory allocation when sending audio data.|
+| <b>Plugins</b>/Ionic.Zlib.dll              | Codec for Zlib audio compression and decompression.               |
+| <b>Plugins</b>/NSpeex.dll                  | Codec for Nspeex audio compression and decompression.             |
+| <b>Plugins</b>/Snappy                      | Codec for Snappy audio compression and decompression.             |
+
 <h2> Contribute </h2> 
    If anything is unclear or unintuitive, feel free to contact us. We heartily welcome pull requests because, again, this is an open source project. Any contributions will be documented.
  
