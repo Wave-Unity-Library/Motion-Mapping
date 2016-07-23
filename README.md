@@ -4,10 +4,9 @@
 We want <b>mobile gaming</b> to be a more immersive and interactive experience, so we designed Wave. It's an open source <b>Unity game engine Asset</b> that makes 2 game dev features tremendously more accessible: <i>elements of motion tracking</i> for character control and <i>real-time audio streaming</i> between multiple devices. Check out a 2-minute demo video <a href="https://www.youtube.com/watch?v=56wYgaHN8r8&feature=youtu.be">here</a>. 
 
 ## Table of Contents  
-[Prerequisites](#Prerequisites) 
-<a name="prerequisites"/>
+[Prerequisites](#prerequisites)
 
-##Prerequisites
+<h2> <a name="prerequisites"></a> Prerequisites </h2>
 
    * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_25/v1469119124/20100523235954_Unity_logo_va96rl.png) <a href="https://unity3d.com/get-unity/download">Unity 5</a>
    * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_20/v1469118908/Windows_logo_-_2012_byfabw.png) <b>Windows</b>: 7 SP1+, 8, 10
