@@ -82,7 +82,7 @@ We provide multiple compression options such as: Zlib, Opus, NSpeex, A-law with 
 <h2> <a name="contribute"></a> Contribute </h2> 
    If anything is unclear or unintuitive, feel free to contact us. We heartily welcome pull requests because, again, this is an open source project. Any contributions will be documented.
  
-<h2> <a name="name"></a> Our Team </h2>
+<h2> <a name="team"></a> Our Team </h2>
    * Jessica Ayunani - github.com/jayunani
    * Michael Laythe - github.com/mlaythe
    * Jeremy Yip - github.com/jeyip
