@@ -59,7 +59,7 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
  * Packet Sizes
  ...everything really
  
-We provide multiple compression options such as: Zlib, Opus, NSpeex, A-law with Zlib. 
+We provide multiple compression options such as: Zlib, Opus, NSpeex, and Snappy. 
 
 ![alt tag](http://res.cloudinary.com/dhwokgvxt/image/upload/v1469118985/Screen_Shot_2016-07-21_at_9.27.54_AM_aho1lh.png)  
   
