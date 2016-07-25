@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Plugins/Snappy/SnappyDL/SnappyDL.vcxproj.meta
 guid: ad8739f5fe8124b52b9bd8e29e7a330b
 timeCreated: 1469084094
+=======
+guid: cd5bce549d2bf4b96ba97f939138a989
+timeCreated: 1466803673
+>>>>>>> edf09ac91f5c31cfcbd588c91ac744ed43af4334:Assets/Scenes/Main.unity.meta
 licenseType: Free
 DefaultImporter:
   userData: 
