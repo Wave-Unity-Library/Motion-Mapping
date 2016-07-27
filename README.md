@@ -53,8 +53,8 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
    Allows you to talk with your mates by providing a way to transmit your voice across a multiplayer network.
    
    To get started you'll want to add the following things to any game object you want to be able to talk in real-time:
-    * AudioSource object
-    * our <b>VoiceController.cs script</b>
+   * AudioSource object
+   * <i>VoiceController.cs</i>
 
 ![alt tag](http://res.cloudinary.com/dhwokgvxt/image/upload/v1469118991/Screen_Shot_2016-07-21_at_9.33.06_AM_v7tqw6.png)  
    
