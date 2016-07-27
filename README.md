@@ -80,7 +80,7 @@ We provide multiple compression options such as: Zlib, Opus, NSpeex, and Snappy.
 | <b>Plugins</b>/Snappy                      | Codec for Snappy audio compression and decompression.             |
 
 <h2> <a name="contribute"></a> Contribute </h2> 
-   If anything is unclear or unintuitive, feel free to contact us. We heartily welcome pull requests because, again, this is an open source project. Any contributions will be documented.
+   If anything is at all unintuitive or unclear, please feel free to reach out. We'd love to incorporate any feedback from the community, especially given that this is an open source project. This is very much a continual work in progress, and we're constantly adding functionality. 
  
 <h2> <a name="team"></a> Our Team </h2>
    * Jessica Ayunani - github.com/jayunani
