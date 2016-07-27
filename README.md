@@ -20,7 +20,7 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
    * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_25/v1469118917/Apple-icon_lo0q8q.png) <b>iOS</b>: Mac OSX 10.8+ with <a href="https://itunes.apple.com/us/app/xcode/id497799835?mt=12">Xcode</a>
    * ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/c_scale,w_20/v1469123670/Android_robot.svg_o9anin.png) <b>Android</b>: <a href="https://developer.android.com/studio/index.html">Android SDK</a>
 
-<h2> Getting Started </h2>
+<h2> <a name="getting-started"></a> Getting Started </h2>
  <h3> Setting up Unity Remote </h3>
   To use a phone with the Unity editor, 
   * Download Unity Remote 4 from the app store. 
