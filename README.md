@@ -36,17 +36,15 @@ We want <b>mobile gaming</b> to be a more immersive and interactive experience, 
 <h2> <a name="gyro-cam"></a> Gyroscopic Camera Controller </h2>
    ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1468705961/GyroscopeController_mu7qac.gif)   
    In the GIF above, we're setting up an environment to use a <b>mobile phone's</b> gyroscope to control the in-game camera. Get started by following the steps below:
-   * Download our scripts.
-   * Include them in the <b>Assets folder</b> of your Unity library.
+   * All logic is located inside the <i>cameraController.js</i> script. Make sure it's within the <b>Assets folder</b> of your Unity library.
    * Select the <b>Main Camera</b> object in your scene.
    * Add our <b>Camera Controller script</b> as a component in the inspector panel.
-   * Drag a player object into the Camera Controller component.  
+   * Drag a player object into the Camera Controller component.
   
 <h2> <a name="translational-movement"></a> Translational Movement with Accelerometer  </h2>
    ![alt tag](http://res.cloudinary.com/jjcodepen/image/upload/v1469215988/Accelerometer_oh2uj8.gif)  
    The idea of this feature is that when you move in the physical world, your in-game character moves as well. Using information from the mobile phone's accelerometer, we attempt to simulate walking movements in the Unity game engine.  It's still experimental, but it works and may require tweaking depending on the mobile phone. Get started by following the steps below:
-   * Download our scripts.
-   * Include them in the <b>Assets folder</b> of your Unity library.
+   * All logic is located inside the <i>playerController.js</i> script. Make sure it's within the <b>Assets folder</b> of your Unity library.
    * Select the <b>Player</b> object in your scene.
    * Add our <b>Player Controller script</b> as a component in the inspector panel.
    * Drag a player object into the Camera Controller component.  
